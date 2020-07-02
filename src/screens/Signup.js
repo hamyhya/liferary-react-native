@@ -4,34 +4,36 @@ import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity, 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-import bg from '../assets/img/liferary-logo.png';
+import bg from '../assets/img/bg.png';
 
 export default class Signup extends Component {
+  login = () => {
+    this.props.navigation.navigate('signin')
+  }
   render() {
     return (
-      <View>
-        <View style={signupStyle.fill}>
-          <View style={signupStyle.bg}>
-            <View>
-              <Text style={signupStyle.title}>Register</Text>
-              <Text style={signupStyle.subTitle}>Let's join us!</Text>
-            </View>
-            <View style={signupStyle.formWrap}>
-              <KeyboardAvoidingView 
-                behavior={Platform.OS == "android" ? "padding" : "height"}
-                style={signupStyle.flex}>
-                <TextInput style={signupStyle.input} placeholder='Name' placeholderTextColor='white'/>
-                <TextInput  style={signupStyle.input} placeholder='Email' placeholderTextColor='white'/>
-                <TextInput style={signupStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
-              </KeyboardAvoidingView>
-              <View style={signupStyle.btnWrapper}>
-                <TouchableOpacity style={signupStyle.btnLogin}>
-                  <Text style={signupStyle.btnTextLogin}>REGISTER</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={signupStyle.btnRegister}>
-                  <Text style={signupStyle.btnTextRegister}>LOGIN</Text>
-                </TouchableOpacity>
-              </View>
+      <View style={signupStyle.fill}>
+        <Image source={bg} style={signupStyle.accent1} />
+        <View style={signupStyle.accent2}>
+          <View>
+            <Text style={signupStyle.title}>Register</Text>
+            <Text style={signupStyle.subTitle}>Let's join us!</Text>
+          </View>
+          <View style={signupStyle.formWrap}>
+            <KeyboardAvoidingView 
+              behavior={Platform.OS == "android" ? "padding" : "height"}
+              style={signupStyle.flex}>
+              <TextInput style={signupStyle.input} placeholder='Name' placeholderTextColor='white'/>
+              <TextInput  style={signupStyle.input} placeholder='Email' placeholderTextColor='white'/>
+              <TextInput style={signupStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
+            </KeyboardAvoidingView>
+            <View style={signupStyle.btnWrapper}>
+              <TouchableOpacity style={signupStyle.btnLogin} onPress={this.login}>
+                <Text style={signupStyle.btnTextLogin}>REGISTER</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={signupStyle.btnRegister} onPress={this.login}>
+                <Text style={signupStyle.btnTextRegister}>LOGIN</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -43,15 +45,23 @@ export default class Signup extends Component {
 const signupStyle = StyleSheet.create({
   fill: {
     flex: 1,
+    position: 'relative'
   },
-  bg: {
+  accent1: {
+    width: deviceWidth,
+    height: deviceHeight,
+    position: 'absolute',
+    zIndex: 0
+  },
+  accent2: {
     width: 200,
     height: 80,
-    backgroundColor: '#3F4254',
     width: deviceWidth,
     height: deviceHeight,
     alignItems: "center",
-    paddingTop: 50
+    paddingTop: 50,
+    position: 'absolute',
+    zIndex: 1
   },
   title: {
     color: 'white',
@@ -97,7 +107,6 @@ const signupStyle = StyleSheet.create({
     marginTop: 10,
     width: 250,
     height: 40,
-    backgroundColor: '#3F4254',
     borderWidth: 3,
     borderColor: 'white',
     borderRadius: 10,

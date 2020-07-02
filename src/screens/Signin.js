@@ -4,36 +4,47 @@ import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity} 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-import bg from '../assets/img/liferary-logo.png';
+import bg from '../assets/img/bg.png';
 
 export default class Signin extends Component {
+  constructor(props) {
+    super(props)
+  }
+  signup = () => {
+    this.props.navigation.navigate('signup')
+  }
+  signin = () => {
+    this.props.navigation.navigate('mainmenu')
+  }
+  adminDashboard = () => {
+    this.props.navigation.navigate('mainmenuadmin')
+  }
   render() {
     return (
-      <View>
-        <View style={loginStyle.fill}>
-          <View style={loginStyle.bg}>
+      <View style={loginStyle.fill}>
+        <Image source={bg} style={loginStyle.accent1}/>
+        <View style={loginStyle.accent2}>
+          <View>
+            <Text style={loginStyle.title}>Liferary</Text>
+            <Text style={loginStyle.subTitle}>library is life</Text>
+          </View>
+          <View style={loginStyle.formWrap}>
             <View>
-              <Text style={loginStyle.title}>Liferary</Text>
-              <Text style={loginStyle.subTitle}>library is life</Text>
+              <TextInput  style={loginStyle.input} placeholder='Email' placeholderTextColor='white'/>
+              <TextInput style={loginStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
             </View>
-            <View style={loginStyle.formWrap}>
-              <View>
-                <TextInput  style={loginStyle.input} placeholder='Email' placeholderTextColor='white'/>
-                <TextInput style={loginStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
-              </View>
-              <View style={loginStyle.btnWrapper}>
-                <TouchableOpacity style={loginStyle.btnLogin}>
-                  <Text style={loginStyle.btnTextLogin}>LOGIN</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={loginStyle.btnRegister}>
-                  <Text style={loginStyle.btnTextRegister}>REGISTER</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={loginStyle.footer}>
-                <TouchableOpacity>
-                  <Text style={loginStyle.footerText}>I'm an administrator</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={loginStyle.btnWrapper}>
+              <TouchableOpacity style={loginStyle.btnLogin} onPress={this.signin}>
+                <Text style={loginStyle.btnTextLogin}>LOGIN</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={loginStyle.btnRegister} onPress={this.signup}>
+                <Text style={loginStyle.btnTextRegister}>REGISTER</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={loginStyle.footer}>
+              <TouchableOpacity onPress={this.adminDashboard}>
+                <Text style={loginStyle.footerText}>I'm an administrator</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -45,15 +56,23 @@ export default class Signin extends Component {
 const loginStyle = StyleSheet.create({
   fill: {
     flex: 1,
+    position: 'relative'
   },
-  bg: {
+  accent1: {
+    width: deviceWidth,
+    height: deviceHeight,
+    position: 'absolute',
+    zIndex: 0
+  },
+  accent2: {
     width: 200,
     height: 80,
-    backgroundColor: '#3F4254',
     width: deviceWidth,
     height: deviceHeight,
     alignItems: "center",
-    paddingTop: 50
+    paddingTop: 50,
+    position: 'absolute',
+    zIndex: 1
   },
   title: {
     color: 'white',
@@ -99,7 +118,6 @@ const loginStyle = StyleSheet.create({
     marginTop: 10,
     width: 250,
     height: 40,
-    backgroundColor: '#3F4254',
     borderWidth: 3,
     borderColor: 'white',
     borderRadius: 10,

@@ -1,12 +1,31 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-import bg from '../assets/img/nature.jpg';
+import bg from '../assets/img/dilan.jpeg';
 
-export default class Signin extends Component {
+export default class DashboardAdmin extends Component {
+  detail = () => {
+    this.props.navigation.navigate('detail')
+  }
+  transaction = () => {
+    this.props.navigation.navigate('transaction')
+  }
+  admin = () => {
+    this.props.navigation.navigate('admin')
+  }
+  genre = () => {
+    this.props.navigation.navigate('genre')
+  }
+  history = () => {
+    this.props.navigation.navigate('historyadmin')
+  }
+  user = () => {
+    this.props.navigation.navigate('user')
+  }
   render() {
     return (
       <View style={style.fill}>
@@ -17,58 +36,45 @@ export default class Signin extends Component {
           <TextInput style={style.searchInput} placeholder='Search Book ...' placeholderTextColor='white'/>
         </View>
         <ScrollView style={style.scrollView}>
-          <View style={style.categories}>
-            <Text style={style.categoriesText}>Categories</Text>
-            <View style={style.categoriesList}>
-              <TouchableOpacity style={style.categoriesBtn}>
-                <Text style={style.categoriesBtnText}>comedy</Text>
+          <View style={style.menu}>
+            <View style={style.menuRow}>
+              <TouchableOpacity style={style.menuIcon}>
+                <Icon size={30} color='white' name='plus-square'/>
+                <Text style={style.iconText}>Add Book</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={style.categoriesBtn}>
-                <Text style={style.categoriesBtnText}>action</Text>
+              <TouchableOpacity style={style.menuIcon} onPress={this.admin}>
+                <Icon size={30} color='white' name='suitcase'/>
+                <Text style={style.iconText}>Admin</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={style.categoriesBtn}>
-                <Text style={style.categoriesBtnText}>horror</Text>
+              <TouchableOpacity style={style.menuIcon} onPress={this.user}>
+                <Icon size={30} color='white' name='user'/>
+                <Text style={style.iconText}>User</Text>
               </TouchableOpacity>
             </View>
-          </View>
-          <View style={style.latest}>
-            <Text style={style.categoriesText}>Latest release</Text>
-            <View style={style.latestRow}>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-                    {/* <Image style={style.bookCover} source={bg} /> */}
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
+            <View style={style.menuRow}>
+              <TouchableOpacity style={style.menuIcon} onPress={this.transaction}>
+                <Icon size={30} color='white' name='credit-card'/>
+                <Text style={style.iconText}>Transaction</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
+              <TouchableOpacity style={style.menuIcon} onPress={this.genre}>
+                <Icon size={30} color='white' name='tags'/>
+                <Text style={style.iconText}>Genre</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
+              <TouchableOpacity style={style.menuIcon} onPress={this.history}>
+                <Icon size={30} color='white' name='history'/>
+                <Text style={style.iconText}>History</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={style.categories}>
-            <Text style={style.categoriesText}>You may also like</Text>
+            <Text style={style.categoriesText}>Our books</Text>
           </View>
           <View style={style.listBook}>
             <View style={style.bookRow}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.detail}>
                 <View style={style.bookCard}>
                   <View style={style.bookImage}>
-                    {/* <Image style={style.bookCover} source={bg} /> */}
+                    <Image style={style.bookCover} source={bg} />
                   </View>
                   <Text style={style.bookTitle}>Naruto</Text>
                 </View>
@@ -144,11 +150,6 @@ export default class Signin extends Component {
             </View>
           </View>
         </ScrollView>
-        <View style={style.navbar}>
-          <TouchableOpacity style={style.navbarBtn}/>
-          <TouchableOpacity style={style.navbarBtn}/>
-          <TouchableOpacity style={style.navbarBtn}/>
-        </View>
       </View>
     );
   }
@@ -183,6 +184,32 @@ const style = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 30
   },
+  menu: {
+    width: deviceWidth-120,
+    height: 150,
+    alignSelf: 'center',
+    backgroundColor: '#252731',
+    borderRadius: 10,
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  menuRow: {
+    marginTop: 5,
+    marginBottom: 5,
+    flexDirection: 'row'
+  },
+  menuIcon: {
+    width: 55,
+    alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 10
+  },
+  iconText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: 'white'
+  },
   categories: {
     alignSelf: 'center',
     width: deviceWidth-120,
@@ -193,10 +220,6 @@ const style = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold'
   },
-  categoriesList: {
-    marginTop: 10,
-    flexDirection: 'row'
-  },
   categoriesBtn: {
     padding: 5,
     backgroundColor: '#7A7C86',
@@ -206,20 +229,6 @@ const style = StyleSheet.create({
     borderRadius: 10,
     marginLeft: 3,
     marginRight: 3
-  },
-  categoriesBtnText: {
-    color: 'white',
-    fontWeight: 'bold'
-  },
-  latest: {
-    alignSelf: 'center',
-    width: deviceWidth-120,
-    marginTop: 25,
-  },
-  latestRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10
   },
   scrollView: {
     marginTop: 10,
@@ -247,7 +256,11 @@ const style = StyleSheet.create({
     borderRadius: 10
   },
   bookCover: {
-    resizeMode: 'contain'
+    borderRadius: 10,
+    resizeMode: 'cover',
+    flex: 1,
+    width: undefined,
+    height: undefined
   },
   bookTitle: {
     fontSize: 15,
