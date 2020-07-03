@@ -16,9 +16,9 @@ export default class Genre extends Component {
         </View>
         <ScrollView style={style.content}>
           <View style={style.transactionsList}>
-              <TouchableOpacity>
+              <View>
                 <Text style={style.bookTitle}>Actions</Text>
-              </TouchableOpacity>
+              </View>
               <View style={style.badgeWrapper}>
                 <TouchableOpacity style={style.badgeWarning}>
                   <Text style={style.badgeText}>edit</Text>
@@ -30,9 +30,9 @@ export default class Genre extends Component {
           </View>
           <View style={style.line} />
           <View style={style.transactionsList}>
-              <TouchableOpacity>
+              <View>
                 <Text style={style.bookTitle}>Romance</Text>
-              </TouchableOpacity>
+              </View>
               <View style={style.badgeWrapper}>
                 <TouchableOpacity style={style.badgeWarning}>
                   <Text style={style.badgeText}>edit</Text>
@@ -44,9 +44,9 @@ export default class Genre extends Component {
           </View>
           <View style={style.line} />
           <View style={style.transactionsList}>
-              <TouchableOpacity>
+              <View>
                 <Text style={style.bookTitle}>Comedy</Text>
-              </TouchableOpacity>
+              </View>
               <View style={style.badgeWrapper}>
                 <TouchableOpacity style={style.badgeWarning}>
                   <Text style={style.badgeText}>edit</Text>

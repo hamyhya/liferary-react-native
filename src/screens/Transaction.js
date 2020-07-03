@@ -5,6 +5,9 @@ const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
 export default class Transaction extends Component {
+  detail = () => {
+    this.props.navigation.navigate('transactiondetail')
+  }
   render() {
     return (
       <View style={style.fill}>
@@ -15,7 +18,7 @@ export default class Transaction extends Component {
           </View>
         </View>
         <ScrollView style={style.content}>
-          <TouchableOpacity style={style.transactionsList}>
+          <TouchableOpacity style={style.transactionsList} onPress={this.detail}>
             <View style={style.transactionsDetail}>
               <Text style={style.bookTitle}>Dolan 1945</Text>
               <Text style={style.bookDate}>Monday, 1 June 2020 03:45</Text>

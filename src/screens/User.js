@@ -5,6 +5,9 @@ const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
 export default class User extends Component {
+  detail = () => {
+    this.props.navigation.navigate('userdetail')
+  }
   render() {
     return (
       <View style={style.fill}>
@@ -16,14 +19,11 @@ export default class User extends Component {
         </View>
         <ScrollView style={style.content}>
           <View style={style.transactionsList}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.detail}>
                 <Text style={style.bookTitle}>Badang Suratno</Text>
                 <Text style={style.bookDate}>badang@moonton.chn</Text>
               </TouchableOpacity>
               <View style={style.badgeWrapper}>
-                <TouchableOpacity style={style.badgeWarning}>
-                  <Text style={style.badgeText}>edit</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={style.badgeDanger}>
                   <Text style={style.badgeText}>delete</Text>
                 </TouchableOpacity>
@@ -36,9 +36,6 @@ export default class User extends Component {
                 <Text style={style.bookDate}>zilong99@yahoo.jp</Text>
               </TouchableOpacity>
               <View style={style.badgeWrapper}>
-                <TouchableOpacity style={style.badgeWarning}>
-                  <Text style={style.badgeText}>edit</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={style.badgeDanger}>
                   <Text style={style.badgeText}>delete</Text>
                 </TouchableOpacity>
@@ -51,9 +48,6 @@ export default class User extends Component {
                 <Text style={style.bookDate}>ronaldowanto@liferary.gov</Text>
               </TouchableOpacity>
               <View style={style.badgeWrapper}>
-                <TouchableOpacity style={style.badgeWarning}>
-                  <Text style={style.badgeText}>edit</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={style.badgeDanger}>
                   <Text style={style.badgeText}>delete</Text>
                 </TouchableOpacity>
@@ -105,14 +99,6 @@ const style = StyleSheet.create({
   badgeWrapper: {
     flexDirection: 'row',
     alignItems: 'center'
-  },
-  badgeWarning: {
-    width: 50,
-    height: 25,
-    backgroundColor: '#c0ca33',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   badgeDanger: {
     width: 50,

@@ -5,6 +5,9 @@ const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
 export default class Admin extends Component {
+  detail = () => {
+    this.props.navigation.navigate('admindetail')
+  }
   render() {
     return (
       <View style={style.fill}>
@@ -16,7 +19,7 @@ export default class Admin extends Component {
         </View>
         <ScrollView style={style.content}>
           <View style={style.transactionsList}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.detail}>
                 <Text style={style.bookTitle}>Badang Suratno</Text>
                 <Text style={style.bookDate}>badang@moonton.chn</Text>
               </TouchableOpacity>

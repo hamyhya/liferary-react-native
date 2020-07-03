@@ -13,6 +13,9 @@ import Admin from './src/screens/Admin'
 import Genre from './src/screens/Genre'
 import HistoryAdmin from './src/screens/HistoryAdmin';
 import User from './src/screens/User';
+import AdminDetail from './src/screens/AdminDetail';
+import UserDetail from './src/screens/UserDetail';
+import TransactionDetail from './src/screens/TransactionDetail';
 
 const Stack = createStackNavigator()
 const BottomTab = createBottomTabNavigator()
@@ -37,11 +40,13 @@ export default class App extends Component {
               headerTransparent: true,
               headerTintColor: 'white'
             }}/>
+            <Stack.Screen component={TransactionDetail} name={'transactiondetail'} options={{headerShown: false}}/>
             <Stack.Screen component={Admin} name={'admin'} options={{
               title: '',
               headerTransparent: true,
               headerTintColor: 'white'
             }}/>
+            <Stack.Screen component={AdminDetail} name={'admindetail'} options={{headerShown: false}}/>
             <Stack.Screen component={Genre} name={'genre'} options={{
               title: '',
               headerTransparent: true,
@@ -57,6 +62,7 @@ export default class App extends Component {
               headerTransparent: true,
               headerTintColor: 'white'
             }}/>
+            <Stack.Screen component={UserDetail} name={'userdetail'} options={{headerShown: false}}/>
           </Stack.Navigator>
         </NavigationContainer>
       </>
