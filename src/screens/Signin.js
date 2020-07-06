@@ -1,20 +1,41 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity} from 'react-native';
+import {Text, View, Image, StyleSheet, Dimensions, TextInput, 
+        TouchableOpacity, Alert}
+        from 'react-native';
+import {connect} from 'react-redux'
+
+import {loginUser} from '../redux/action/auth'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
 import bg from '../assets/img/bg.png';
 
-export default class Signin extends Component {
+class Signin extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      email: '',
+      password: ''
+    }
+  }
+  handlerChange = (e) => {
+    this.setState({[e.target.name]: e.target.value})
+  }
+  signin = () => {
+    const dataSubmit = {
+      email: this.state.email,
+      password: this.state.password
+    }
+
+    this.props.loginUser(dataSubmit).then((response) => {
+      this.props.navigation.navigate('mainmenu')
+    }).catch(function (error) {
+      Alert.alert('Incorrect Data!', 'Wrong email or password :(')
+    })
   }
   signup = () => {
     this.props.navigation.navigate('signup')
-  }
-  signin = () => {
-    this.props.navigation.navigate('mainmenu')
   }
   adminDashboard = () => {
     this.props.navigation.navigate('mainmenuadmin')
@@ -30,8 +51,8 @@ export default class Signin extends Component {
           </View>
           <View style={loginStyle.formWrap}>
             <View>
-              <TextInput  style={loginStyle.input} placeholder='Email' placeholderTextColor='white'/>
-              <TextInput style={loginStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
+              <TextInput onChangeText={(e) => {this.setState({email: e})}} style={loginStyle.input} placeholder='Email' placeholderTextColor='white'/>
+              <TextInput onChangeText={(e) => {this.setState({password: e})}} style={loginStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
             </View>
             <View style={loginStyle.btnWrapper}>
               <TouchableOpacity style={loginStyle.btnLogin} onPress={this.signin}>
@@ -52,6 +73,10 @@ export default class Signin extends Component {
     );
   }
 }
+
+const mapDispatchToProps = {loginUser}
+
+export default connect(null, mapDispatchToProps)(Signin)
 
 const loginStyle = StyleSheet.create({
   fill: {

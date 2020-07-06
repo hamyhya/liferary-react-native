@@ -1,12 +1,76 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, Image, StyleSheet, Dimensions, TouchableOpacity, 
+        ScrollView, Alert} 
+        from 'react-native';
+import {connect} from 'react-redux'
+
+import {getBookById} from '../redux/action/book'
+import {getGenreById} from '../redux/action/genre'
+import {postTransaction} from '../redux/action/transaction'
 
 const deviceWidth = Dimensions.get('screen').width;
 
 import book from '../assets/img/dilan.jpeg';
 
-export default class Detail extends Component {
+class Detail extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      id: this.props.route.params.id,
+      userId: this.props.auth.dataLogin.id,
+      token: this.props.auth.token
+    }
+  }
+  borrowModal = () => {
+    Alert.alert(
+      'Borrow this book?',
+      "Promise me to take the book carefully",
+      [
+        {
+          text: '',
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        { text: 'OK', 
+          onPress: this.borrow 
+      }
+      ],
+      { cancelable: false }
+    )
+  }
+  borrow = () => {
+    const {token} = this.state
+    const dataSubmit = {
+      book_id: this.state.id,
+      user_id: this.state.userId,
+      employee_id: 7
+    }
+
+    this.props.postTransaction(dataSubmit, token).then((response) => {
+      Alert.alert('Yay! Borrow success','Contact admin for completing transaction ;)')
+      this.props.navigation.navigate('mainmenu')
+    }).catch(function (error) {
+      Alert.alert('Oops!', 'Someone has already take this book :(')
+    })
+  }
+  fetchBook = () => {
+    const {id} = this.state
+    this.props.getBookById(id)
+  }
+  fetchGenre = () => {
+    const id = this.props.book.dataBookId.genre
+    this.props.getGenreById(id)
+  }
+  componentDidMount() {
+    this.fetchBook()
+    this.fetchGenre()
+  }
   render() {
+    const {dataBookId, isLoading} = this.props.book
+    const {dataGenreId} = this.props.genre
+
     return (
       <View style={style.fill}>
         <View style={style.header}>
@@ -16,13 +80,13 @@ export default class Detail extends Component {
         <ScrollView>
           <View style={style.bookInfoWrapper}>
             <View style={style.bookImage}>
-              <Image source={book} style={style.bookCover} />
+              <Image source={{uri: dataBookId.picture}} style={style.bookCover} />
             </View>
             <View style={style.bookInfo}>
-              <Text style={style.bookTitle}>Dolan 1945</Text>
-              <Text style={style.bookAuthor}>Pidi Jahat</Text>
+              <Text style={style.bookTitle}>{dataBookId.title}</Text>
+              <Text style={style.bookAuthor}>{dataBookId.author}</Text>
               <View style={style.bookGenre}>
-                <Text style={style.bookGenreText}>horror</Text>
+                <Text style={style.bookGenreText}>{dataGenreId}</Text>
               </View>
             </View>
           </View>
@@ -30,20 +94,11 @@ export default class Detail extends Component {
           <View style={style.bookDesc}>
             <Text style={style.bookDescTitle}>Book Description :</Text>
             <Text style={style.bookDescContent}>
-              In 1990, Milea, her sister Airin, and their parents 
-              move from Jakarta to Bandung. Her father is an Army 
-              officer. On her way to the school, he met Dilan, a 
-              bad boy and motorbike gang leader who confidently 
-              says she will sit on his bike and he will be her 
-              boyfriend. Dilan started to seduce her by coming to 
-              her house, calling to her house from a payphone, and 
-              sending her odd but romantic gifts which includes a
-              pre-filled crossword puzzle book; "so you don’t have 
-              to think about the answers".
+              {dataBookId.description}
             </Text>
           </View>
           <View style={style.line} />
-          <TouchableOpacity style={style.borrowBtn}>
+          <TouchableOpacity style={style.borrowBtn} onPress={this.borrowModal}>
             <Text style={style.borrowBtnText}>BORROW</Text>
           </TouchableOpacity>
           <View style={style.line} />
@@ -92,6 +147,15 @@ export default class Detail extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  book: state.book,
+  genre: state.genre,
+  auth: state.auth
+})
+const mapDispatchToProps = {getBookById, getGenreById, postTransaction}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail)
+
 const style = StyleSheet.create({
   fill: {
     flex: 1,
@@ -135,13 +199,13 @@ const style = StyleSheet.create({
     height: undefined
   },
   bookInfo: {
-    marginLeft: 15
+    marginLeft: 15,
+    width: deviceWidth-200,
   },
   bookTitle: {
     fontSize: 25,
     fontWeight: 'bold',
     color: 'white',
-    alignSelf: 'center'
   },
   bookAuthor: {
     color: '#7064BC',

@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
 import {
-  Text,
-  TextInput,
-  View,
-  Image,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
+  Text, View, Image, StyleSheet, Dimensions, TouchableOpacity,
+  Alert
 } from 'react-native';
+import {connect} from 'react-redux'
+
+import {logout} from '../redux/action/auth'
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 import bg from '../assets/img/bg.png';
 
-export default class Profile extends Component {
+class Profile extends Component {
+  logoutModal = () => {
+    Alert.alert(
+      'Are you sure?',
+      "You'll leave me alone :(",
+      [
+        {
+          text: '',
+          // onPress: () => console.log('Ask me later pressed')
+        },
+        {
+          text: 'Cancel',
+          // onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        { text: 'Logout', 
+          onPress: this.logout 
+      }
+      ],
+      { cancelable: false }
+    )
+  }
   logout = () => {
+    this.props.logout()
     this.props.navigation.navigate('signin')
   }
   render() {
@@ -24,11 +44,11 @@ export default class Profile extends Component {
         <Image source={bg} style={style.accent1} />
         <View style={style.accent2}>
           <View style={style.profileDetail}>
-            <Text style={style.profileName}>Ilham Bagas</Text>
-            <Text style={style.profileName}>ilham@smeatech.com</Text>
+            <Text style={style.profileName}>{this.props.auth.dataLogin.name}</Text>
+            <Text style={style.profileName}>{this.props.auth.dataLogin.email}</Text>
             <Text style={style.ProfileJoin}>We're so happy to having you :)</Text>
           </View>
-          <TouchableOpacity style={style.backBtn} onPress={this.logout}>
+          <TouchableOpacity style={style.backBtn} onPress={this.logoutModal}>
             <Text style={style.backBtnText}>LOGOUT</Text>
           </TouchableOpacity>
         </View>
@@ -37,7 +57,12 @@ export default class Profile extends Component {
   }
 }
 
-const accentHeight = 250;
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+const mapDispatchToProps = {logout}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)
 
 const style = StyleSheet.create({
   fill: {

@@ -1,157 +1,113 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity, 
+        ScrollView, FlatList} 
+        from 'react-native';
+import {connect} from 'react-redux'
+
+import {getBook} from '../redux/action/book'
+import {getGenre} from '../redux/action/genre'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-import bg from '../assets/img/dilan.jpeg';
+class Dashboard extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      page: 1,
+      search: ''
+    }
+  }
+  fetchData = () => {
+    const {page, search} = this.state
+    this.props.getBook(`page=${page}%search=${search}`)
+  }
+  fetchGenre = () => {
+    this.props.getGenre()
+  }
 
-export default class Dashboard extends Component {
-  detail = () => {
-    this.props.navigation.navigate('detail')
+  componentDidMount() {
+    this.fetchData()
+    this.fetchGenre()
   }
   render() {
+    const {dataBook, isLoading} = this.props.book
+    const {dataGenre} = this.props.genre
+
     return (
       <View style={style.fill}>
         <View style={style.header}>
           <Text style={style.headerTitle}>Liferary</Text>
         </View>
         <View style={style.search}>
-          <TextInput style={style.searchInput} placeholder='Search Book ...' placeholderTextColor='white'/>
+          <TextInput 
+            style={style.searchInput} 
+            placeholder='Search Book ...' 
+            placeholderTextColor='white'
+            onChangeText={(e) => {this.setState({search: e})}}
+          />
+          <TouchableOpacity style={style.searchBtn}>
+            <Text style={style.searchBtnText}>search</Text>
+          </TouchableOpacity>
         </View>
         <ScrollView style={style.scrollView}>
           <View style={style.categories}>
             <Text style={style.categoriesText}>Categories</Text>
-            <View style={style.categoriesList}>
-              <TouchableOpacity style={style.categoriesBtn}>
-                <Text style={style.categoriesBtnText}>comedy</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.categoriesBtn}>
-                <Text style={style.categoriesBtnText}>action</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.categoriesBtn}>
-                <Text style={style.categoriesBtnText}>horror</Text>
-              </TouchableOpacity>
-            </View>
+            <FlatList
+              horizontal
+              style={style.categoriesList}
+              data={dataGenre}
+              renderItem={({item}) => (
+                <Genre
+                  name={item.name}
+                />
+              )}
+              keyExtractor={item => item.id}
+            />
           </View>
           <View style={style.latest}>
             <Text style={style.categoriesText}>Latest release</Text>
-            <ScrollView horizontal={true} style={style.latestRow}>
-              <TouchableOpacity onPress={this.detail}>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-                    <Image style={style.bookCover} source={bg} />
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this.detail}>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-                    <Image style={style.bookCover} source={bg} />
-                  </View>
-                  <Text style={style.bookTitle}>Belajar Mandiri</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this.detail}>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-                    <Image style={style.bookCover} source={bg} />
-                  </View>
-                  <Text style={style.bookTitle}>A Tale of Two Cities</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this.detail}>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-                    <Image style={style.bookCover} source={bg} />
-                  </View>
-                  <Text style={style.bookTitle}>Cinta Dalam Ikhlas</Text>
-                </View>
-              </TouchableOpacity>
-            </ScrollView>
+              <FlatList
+                horizontal
+                style={style.latestRow}
+                data={dataBook}
+                renderItem={({item}) => (
+                 <TouchableOpacity onPress={()=>this.props.navigation.navigate('detail', {id: item.id})}>
+                    <Latest
+                      title={item.title}
+                      picture={item.picture}
+                    />
+                 </TouchableOpacity>
+                )}
+                keyExtractor={item => item.id}
+                refreshing={isLoading}
+                // onRefresh={() => this.fetchData()}
+                // onEndReached={this.nextPage}
+                // onEndReachedThreshold={0.5}
+              />
           </View>
           <View style={style.categories}>
             <Text style={style.categoriesText}>You may also like</Text>
           </View>
           <View style={style.listBook}>
             <View style={style.bookRow}>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-                    {/* <Image style={style.bookCover} source={bg} /> */}
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={style.bookRow}>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={style.bookRow}>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={style.bookCard}>
-                  <View style={style.bookImage}>
-
-                  </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
-                </View>
-              </TouchableOpacity>
+              <FlatList
+                  data={dataBook}
+                  renderItem={({item}) => (
+                  <TouchableOpacity onPress={()=>this.props.navigation.navigate('detail', {id: item.id})}>
+                      <Latest
+                        title={item.title}
+                        picture={item.picture}
+                      />
+                  </TouchableOpacity>
+                  )}
+                  numColumns={3}
+                  keyExtractor={item => item.id}
+                  refreshing={isLoading}
+                  // onRefresh={() => this.getData({page: currentPage})}
+                  // onEndReached={this.nextPage}
+                  // onEndReachedThreshold={0.5}
+                />
             </View>
           </View>
         </ScrollView>
@@ -159,6 +115,38 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+class Latest extends Component {
+  render(){
+    return(
+      <View style={style.bookCard}>
+        <View style={style.bookImage}>
+          <Image style={style.bookCover} source={{uri: this.props.picture}} />
+        </View>
+        <Text style={style.bookTitle}>{this.props.title}</Text>
+      </View>
+    )
+  }
+}
+
+class Genre extends Component {
+  render(){
+    return(
+      <TouchableOpacity style={style.categoriesBtn}>
+        <Text style={style.categoriesBtnText}>{this.props.name}</Text>
+      </TouchableOpacity>
+    )
+  }
+}
+
+const mapStateToProps = state => ({
+  book: state.book,
+  genre: state.genre,
+  auth: state.auth
+})
+const mapDispatchToProps = {getBook, getGenre}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
 
 const style = StyleSheet.create({
   fill: {
@@ -177,17 +165,32 @@ const style = StyleSheet.create({
     fontWeight: 'bold'
   },
   search: {
-    width: deviceWidth,
+    width: deviceWidth-120,
     alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'center'
   },
   searchInput: {
     backgroundColor: '#383B4A',
     height: 35,
-    width: deviceWidth-120,
+    width: deviceWidth-190,
     fontSize: 10,
     color: '#CFD0D4',
     borderRadius: 10,
     paddingLeft: 30
+  },
+  searchBtn: {
+    backgroundColor: '#383B4A',
+    height: 35,
+    width: 60,
+    marginLeft: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  searchBtnText: {
+    color: 'white',
+    fontSize: 13
   },
   categories: {
     alignSelf: 'center',
@@ -239,7 +242,9 @@ const style = StyleSheet.create({
   },
   bookRow: {
     flexDirection: 'row',
-    width: deviceWidth-60,
+    width: deviceWidth-120,
+    alignSelf: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
   },

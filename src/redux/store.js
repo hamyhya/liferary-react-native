@@ -2,7 +2,7 @@ import {createStore, applyMiddleware} from 'redux'
 import logger from 'redux-logger'
 import promiseMiddleware from 'redux-promise-middleware'
 import rootReducer from './reducer'
-// import {persistStore} from 'redux-persist'
+import {persistStore} from 'redux-persist'
 
 export const store = createStore(
   rootReducer,
@@ -12,6 +12,6 @@ export const store = createStore(
   )
 )
 
-// export const persistor = persistStore(store)
+export const persistor = persistStore(store)
 
- export default {store}
+export default {store}

@@ -1,59 +1,80 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native';
+import {connect} from 'react-redux'
+
+import {getHistoryUser} from '../redux/action/history'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
 import bg from '../assets/img/nature.jpg';
 
-export default class Transaction extends Component {
+class HistoryUser extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      name: 'Jono',
+      page: 1,
+      search: ''
+    }
+  }
+  fetchHistory = () => {
+    // const param = `page=${this.state.page}&search=${this.state.search}`
+    const name = {
+      user: this.state.name
+    }
+
+    this.props.getHistoryUser(name)
+  }
+  componentDidMount() {
+    this.fetchHistory()
+  }
   render() {
+    const {dataHistory, isLoading} = this.props.history
     return (
       <View style={style.fill}>
         <View style={style.header}>
           <Text style={style.transactions}>My Histories</Text>
         </View>
-        <ScrollView style={style.content}>
-          <View style={style.transactionsList}>
-            <View style={style.transactionsDetail}>
-              <Text style={style.bookTitle}>Dolan 1945</Text>
-              <Text style={style.bookDate}>Monday, 1 June 2020 03:45</Text>
-            </View>
-          </View>
-          <View style={style.line} />
-          <View style={style.transactionsList}>
-            <View style={style.transactionsDetail}>
-              <Text style={style.bookTitle}>A Tale of Two Cities</Text>
-              <Text style={style.bookDate}>Tuesday, 14 April 2020 13:55</Text>
-            </View>
-          </View>
-          <View style={style.line} />
-          <View style={style.transactionsList}>
-            <View style={style.transactionsDetail}>
-              <Text style={style.bookTitle}>Cinta Dalam Ikhlas</Text>
-              <Text style={style.bookDate}>Friday, 5 February 2020 13:55</Text>
-            </View>
-          </View>
-          <View style={style.line} />
-          <View style={style.transactionsList}>
-            <View style={style.transactionsDetail}>
-              <Text style={style.bookTitle}>Cinta Dalam Ikhlas</Text>
-              <Text style={style.bookDate}>Friday, 5 February 2020 13:55</Text>
-            </View>
-          </View>
-          <View style={style.line} />
-          <View style={style.transactionsList}>
-            <View style={style.transactionsDetail}>
-              <Text style={style.bookTitle}>Cinta Dalam Ikhlas</Text>
-              <Text style={style.bookDate}>Friday, 5 February 2020 13:55</Text>
-            </View>
-          </View>
-          <View style={style.line} />
-        </ScrollView>
+        <FlatList 
+          style={style.content}
+          data={dataHistory}
+          renderItem={({item}) => (
+            <History
+              title={item.title}
+              date={item.date}
+            />
+          )}
+          keyExtractor={item => item.id}
+        />
       </View>
     );
   }
 }
+
+class History extends Component {
+  render(){
+    return(
+      <>
+        <View style={style.transactionsList}>
+          <View style={style.transactionsDetail}>
+            <Text style={style.bookTitle}>{this.props.title}</Text>
+            <Text style={style.bookDate}>{this.props.date}</Text>
+          </View>
+        </View>
+        <View style={style.line} />
+      </>
+    )
+  }
+}
+
+const mapStateToProps = state => ({
+  history: state.history,
+  auth: state.auth
+})
+const mapDispatchToProps = {getHistoryUser}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HistoryUser)
 
 const style = StyleSheet.create({
   fill: {

@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import Dashboard from '../screens/Dashboard'
 import Profile from '../screens/Profile'
 import HistoryUser from '../screens/HistoryUser'
+import Transaction from '../screens/Transaction'
 
 const BottomTab = createBottomTabNavigator()
 
@@ -32,13 +33,23 @@ export default class Tab extends Component {
         />
         <BottomTab.Screen
           options={{
-            title: 'History',
+            title: 'Histories',
             tabBarIcon: ({color, size}) => (
               <Icon name="history" color={color} size={size} />
             ),
           }}
           component={HistoryUser}
           name="history"
+        />
+        <BottomTab.Screen
+          options={{
+            title: 'Transactions',
+            tabBarIcon: ({color, size}) => (
+              <Icon name="shopping-cart" color={color} size={size} />
+            ),
+          }}
+          component={Transaction}
+          name="transaction"
         />
         <BottomTab.Screen
           options={{

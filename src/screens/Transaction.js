@@ -1,14 +1,36 @@
 import React, {Component} from 'react';
-import {Text, View, TextInput, StyleSheet, Dimensions, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, TextInput, StyleSheet, Dimensions, TouchableOpacity, 
+        FlatList} 
+        from 'react-native';
+import {connect} from 'react-redux'
+
+import {getTransactionByUser} from '../redux/action/transaction'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-export default class Transaction extends Component {
+class Transaction extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      id: this.props.auth.dataLogin.id,
+    }
+  }
   detail = () => {
     this.props.navigation.navigate('transactiondetail')
   }
+  fetchTransaction = () => {
+    const {id} = this.state
+    this.props.getTransactionByUser(id)
+  }
+  refresh = () => {
+    this.fetchTransaction()
+  }
+  componentDidMount(){
+    this.fetchTransaction()
+  }
   render() {
+    const {dataTransactionUser, isLoading} = this.props.transaction
     return (
       <View style={style.fill}>
         <View style={style.header}>
@@ -17,48 +39,66 @@ export default class Transaction extends Component {
             <TextInput style={style.searchInput} placeholder='Search Transactions ...' placeholderTextColor='white'/>
           </View>
         </View>
-        <ScrollView style={style.content}>
-          <TouchableOpacity style={style.transactionsList} onPress={this.detail}>
-            <View style={style.transactionsDetail}>
-              <Text style={style.bookTitle}>Dolan 1945</Text>
-              <Text style={style.bookDate}>Monday, 1 June 2020 03:45</Text>
-            </View>
-            <View style={style.bookStatus}>
-              <View style={style.bookStatusBadgeWarning}>
-                <Text style={style.bookStatusText}>PENDING</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <View style={style.line} />
-          <TouchableOpacity style={style.transactionsList}>
-            <View style={style.transactionsDetail}>
-              <Text style={style.bookTitle}>A Tale of Two Cities</Text>
-              <Text style={style.bookDate}>Tuesday, 14 April 2020 13:55</Text>
-            </View>
-            <View style={style.bookStatus}>
-              <View style={style.bookStatusBadgeSuccess}>
-                <Text style={style.bookStatusText}>BORROWED</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <View style={style.line} />
-          <TouchableOpacity style={style.transactionsList}>
-            <View style={style.transactionsDetail}>
-              <Text style={style.bookTitle}>Cinta Dalam Ikhlas</Text>
-              <Text style={style.bookDate}>Friday, 5 February 2020 13:55</Text>
-            </View>
-            <View style={style.bookStatus}>
-              <View style={style.bookStatusBadgeDanger}>
-                <Text style={style.bookStatusText}>PENALTY</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <View style={style.line} />
-        </ScrollView>
+        <FlatList 
+          style={style.content}
+          data={dataTransactionUser}
+          renderItem={({item}) => (
+            <>
+              <TouchableOpacity style={style.transactionsList} onPress={this.detail}>
+                <List
+                  id={item.id}
+                  date={item.created_at}
+                  status={item.status}
+                />
+              </TouchableOpacity>
+              <View style={style.line} />
+            </>
+          )}
+          keyExtractor={item => item.id}
+          refreshing={isLoading}
+          onRefresh= {() => {this.refresh()}}
+        />
       </View>
     );
   }
 }
+
+class List extends Component {
+  render(){
+    const status = this.props.status
+    return(
+      <>
+        <View style={style.transactionsDetail}>
+          <Text style={style.bookTitle}>{this.props.date}</Text>
+          <Text style={style.bookDate}>ID Transaction: {this.props.id}</Text>
+        </View>
+        <View style={style.bookStatus}>
+          {status===3 ?(
+            <View style={style.bookStatusBadgeWarning}>
+              <Text style={style.bookStatusText}>PENDING</Text>
+            </View>
+          ): status===1?(
+            <View style={style.bookStatusBadgeSuccess}>
+              <Text style={style.bookStatusText}>BORROWED</Text>
+            </View>
+          ):(
+            <View style={style.bookStatusBadgeDanger}>
+              <Text style={style.bookStatusText}>PENALTY</Text>
+            </View>
+          )}
+        </View>
+      </>
+    )
+  }
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  transaction: state.transaction
+})
+const mapDispatchToProps = {getTransactionByUser}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transaction)
 
 const style = StyleSheet.create({
   fill: {
@@ -119,7 +159,7 @@ const style = StyleSheet.create({
   },
   bookTitle: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: 'bold'
   },
   bookDate: {

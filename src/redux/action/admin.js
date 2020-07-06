@@ -1,8 +1,9 @@
 import axios from '../../services/Axios'
-const {REACT_APP_URL} = process.env
+// import {REACT_APP_URL} from 'react-native-dotenv'
+const env = 'http://192.168.56.1:8080/'
 
 const getAdmin = () =>{
-const url = `http://192.168.56.1:8080/employes/`
+const url = `${env}employes/`
 return {
   type: 'GETADMIN',
   payload: axios().get(url)
