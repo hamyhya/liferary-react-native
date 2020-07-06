@@ -36,7 +36,7 @@ export default class Dashboard extends Component {
           </View>
           <View style={style.latest}>
             <Text style={style.categoriesText}>Latest release</Text>
-            <View style={style.latestRow}>
+            <ScrollView horizontal={true} style={style.latestRow}>
               <TouchableOpacity onPress={this.detail}>
                 <View style={style.bookCard}>
                   <View style={style.bookImage}>
@@ -45,23 +45,31 @@ export default class Dashboard extends Component {
                   <Text style={style.bookTitle}>Naruto</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.detail}>
                 <View style={style.bookCard}>
                   <View style={style.bookImage}>
-
+                    <Image style={style.bookCover} source={bg} />
                   </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
+                  <Text style={style.bookTitle}>Belajar Mandiri</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.detail}>
                 <View style={style.bookCard}>
                   <View style={style.bookImage}>
-
+                    <Image style={style.bookCover} source={bg} />
                   </View>
-                  <Text style={style.bookTitle}>Naruto</Text>
+                  <Text style={style.bookTitle}>A Tale of Two Cities</Text>
                 </View>
               </TouchableOpacity>
-            </View>
+              <TouchableOpacity onPress={this.detail}>
+                <View style={style.bookCard}>
+                  <View style={style.bookImage}>
+                    <Image style={style.bookCover} source={bg} />
+                  </View>
+                  <Text style={style.bookTitle}>Cinta Dalam Ikhlas</Text>
+                </View>
+              </TouchableOpacity>
+            </ScrollView>
           </View>
           <View style={style.categories}>
             <Text style={style.categoriesText}>You may also like</Text>
@@ -215,9 +223,11 @@ const style = StyleSheet.create({
     marginTop: 25,
   },
   latestRow: {
+    width: deviceWidth-120,
     flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10
+    marginTop: 10,
+    alignSelf: 'center',
+    flex: 1
   },
   scrollView: {
     marginTop: 10,

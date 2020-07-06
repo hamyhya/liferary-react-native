@@ -55,11 +55,11 @@ export default class User extends Component {
           </View>
           <View style={style.line} />
         </ScrollView>
-        <View style={style.addBtnWrapper}>
+        {/* <View style={style.addBtnWrapper}>
           <TouchableOpacity style={style.addBtn}>
             <Text style={style.addBtntext}>ADD USER</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     );
   }

@@ -5,7 +5,10 @@ const deviceWidth = Dimensions.get('screen').width;
 
 import book from '../assets/img/dilan.jpeg';
 
-export default class Detail extends Component {
+export default class DetailAdmin extends Component {
+  edit = () => {
+    this.props.navigation.navigate('editbook')
+  }
   render() {
     return (
       <View style={style.fill}>
@@ -43,9 +46,14 @@ export default class Detail extends Component {
             </Text>
           </View>
           <View style={style.line} />
-          <TouchableOpacity style={style.borrowBtn}>
-            <Text style={style.borrowBtnText}>BORROW</Text>
-          </TouchableOpacity>
+          <View style={style.actionBtn}>
+            <TouchableOpacity style={style.editBtn} onPress={this.edit}>
+              <Text style={style.actionBtnText}>EDIT</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.deleteBtn}>
+              <Text style={style.actionBtnText}>DELETE</Text>
+            </TouchableOpacity>
+          </View>
           <View style={style.line} />
           <View style={style.recommendation}>
             <Text style={style.bookDescTitle}>Another books from Pidi Jahat</Text>
@@ -177,16 +185,30 @@ const style = StyleSheet.create({
     fontSize: 13,
     marginBottom: 15
   },
-  borrowBtn: {
-    width: deviceWidth-100,
+  actionBtn: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  editBtn: {
+    width: deviceWidth-280,
     height: 40,
-    backgroundColor: '#7064BC',
+    backgroundColor: '#c0ca33',
+    alignSelf: 'center',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 35
+  },
+  deleteBtn: {
+    width: deviceWidth-280,
+    height: 40,
+    backgroundColor: '#c62828',
     alignSelf: 'center',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center'
   },
-  borrowBtnText: {
+  actionBtnText: {
     color: 'white',
     fontSize: 15,
     fontWeight: 'bold',

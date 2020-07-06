@@ -5,6 +5,12 @@ const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
 export default class Genre extends Component {
+  edit = () => {
+    this.props.navigation.navigate('editgenre')
+  }
+  add = () => {
+    this.props.navigation.navigate('addgenre')
+  }
   render() {
     return (
       <View style={style.fill}>
@@ -20,7 +26,7 @@ export default class Genre extends Component {
                 <Text style={style.bookTitle}>Actions</Text>
               </View>
               <View style={style.badgeWrapper}>
-                <TouchableOpacity style={style.badgeWarning}>
+                <TouchableOpacity style={style.badgeWarning} onPress={this.edit}>
                   <Text style={style.badgeText}>edit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.badgeDanger}>
@@ -59,7 +65,7 @@ export default class Genre extends Component {
           <View style={style.line} />
         </ScrollView>
         <View style={style.addBtnWrapper}>
-          <TouchableOpacity style={style.addBtn}>
+          <TouchableOpacity style={style.addBtn} onPress={this.add}>
             <Text style={style.addBtntext}>ADD GENRE</Text>
           </TouchableOpacity>
         </View>

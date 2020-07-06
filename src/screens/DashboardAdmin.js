@@ -9,7 +9,10 @@ import bg from '../assets/img/dilan.jpeg';
 
 export default class DashboardAdmin extends Component {
   detail = () => {
-    this.props.navigation.navigate('detail')
+    this.props.navigation.navigate('detailadmin')
+  }
+  addBook = () => {
+    this.props.navigation.navigate('addbook')
   }
   transaction = () => {
     this.props.navigation.navigate('transaction')
@@ -38,7 +41,7 @@ export default class DashboardAdmin extends Component {
         <ScrollView style={style.scrollView}>
           <View style={style.menu}>
             <View style={style.menuRow}>
-              <TouchableOpacity style={style.menuIcon}>
+              <TouchableOpacity style={style.menuIcon} onPress={this.addBook}>
                 <Icon size={30} color='white' name='plus-square'/>
                 <Text style={style.iconText}>Add Book</Text>
               </TouchableOpacity>

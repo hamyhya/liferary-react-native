@@ -51,6 +51,11 @@ export default class HistoryAdmin extends Component {
           </View>
           <View style={style.line} />
         </ScrollView>
+        <View style={style.clearBtnBg}>
+          <TouchableOpacity style={style.clearBtn}>
+            <Text style={style.clearBtntext}>CLEAR ALL TRANSACTIONS</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -127,5 +132,25 @@ const style = StyleSheet.create({
     alignSelf: 'center',
     height: 2,
     backgroundColor: '#4D4B73'
-  }
+  },
+  clearBtn: {
+    marginTop: 10,
+    marginBottom: 10,
+    width: deviceWidth-120,
+    height: 40,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#c62828',
+    borderRadius: 10
+  },
+  clearBtnBg: {
+    backgroundColor: '#252731'
+  },
+  clearBtntext: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'bold',
+    letterSpacing: 2
+  },
 });

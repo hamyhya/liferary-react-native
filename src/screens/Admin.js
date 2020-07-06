@@ -1,14 +1,34 @@
 import React, {Component} from 'react';
-import {Text, View, TextInput, StyleSheet, Dimensions, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, TextInput, StyleSheet, Dimensions, TouchableOpacity, 
+  ScrollView, FlatList, BackHandler} 
+  from 'react-native';
+import {connect} from 'react-redux'
+import qs from 'querystring'
+
+import {getAdmin} from '../redux/action/admin'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-export default class Admin extends Component {
+class Admin extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      page: 1,
+      isLoading: true
+    }
+  }
+  fetchData = () => {
+		this.props.getAdmin()
+  }
   detail = () => {
     this.props.navigation.navigate('admindetail')
   }
+  componentDidMount() {
+    this.fetchData()
+  }
   render() {
+    const {dataAdmin, isLoading} = this.props.admin
     return (
       <View style={style.fill}>
         <View style={style.header}>
@@ -18,51 +38,20 @@ export default class Admin extends Component {
           </View>
         </View>
         <ScrollView style={style.content}>
-          <View style={style.transactionsList}>
-              <TouchableOpacity onPress={this.detail}>
-                <Text style={style.bookTitle}>Badang Suratno</Text>
-                <Text style={style.bookDate}>badang@moonton.chn</Text>
-              </TouchableOpacity>
-              <View style={style.badgeWrapper}>
-                <TouchableOpacity style={style.badgeWarning}>
-                  <Text style={style.badgeText}>edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.badgeDanger}>
-                  <Text style={style.badgeText}>delete</Text>
-                </TouchableOpacity>
-              </View>
-          </View>
-          <View style={style.line} />
-          <View style={style.transactionsList}>
-              <TouchableOpacity>
-                <Text style={style.bookTitle}>Alberto Zilong</Text>
-                <Text style={style.bookDate}>zilong99@yahoo.jp</Text>
-              </TouchableOpacity>
-              <View style={style.badgeWrapper}>
-                <TouchableOpacity style={style.badgeWarning}>
-                  <Text style={style.badgeText}>edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.badgeDanger}>
-                  <Text style={style.badgeText}>delete</Text>
-                </TouchableOpacity>
-              </View>
-          </View>
-          <View style={style.line} />
-          <View style={style.transactionsList}>
-              <TouchableOpacity>
-                <Text style={style.bookTitle}>Ronaldowanto</Text>
-                <Text style={style.bookDate}>ronaldowanto@liferary.gov</Text>
-              </TouchableOpacity>
-              <View style={style.badgeWrapper}>
-                <TouchableOpacity style={style.badgeWarning}>
-                  <Text style={style.badgeText}>edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.badgeDanger}>
-                  <Text style={style.badgeText}>delete</Text>
-                </TouchableOpacity>
-              </View>
-          </View>
-          <View style={style.line} />
+          <FlatList
+            data={dataAdmin}
+            renderItem={({item}) => (
+              <Item
+                name={item.name}
+                email={item.email}
+              />
+            )}
+            keyExtractor={item => item.id}
+            refreshing={isLoading}
+            // onRefresh={() => this.getData({page: currentPage})}
+            // onEndReached={this.nextPage}
+            // onEndReachedThreshold={0.5}
+          />
         </ScrollView>
         <View style={style.addBtnWrapper}>
           <TouchableOpacity style={style.addBtn}>
@@ -73,6 +62,37 @@ export default class Admin extends Component {
     );
   }
 }
+
+class Item extends Component {
+  render(){
+    return(
+      <>
+        <View style={style.transactionsList}>
+          <TouchableOpacity onPress={this.detail}>
+            <Text style={style.bookTitle}>{this.props.name}</Text>
+            <Text style={style.bookDate}>{this.props.email}</Text>
+          </TouchableOpacity>
+          <View style={style.badgeWrapper}>
+            <TouchableOpacity style={style.badgeWarning}>
+              <Text style={style.badgeText}>edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.badgeDanger}>
+              <Text style={style.badgeText}>delete</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={style.line} />
+      </>
+    )
+  }
+}
+
+const mapStateToProps = state => ({
+  admin: state.admin
+})
+const mapDispatchToProps = {getAdmin}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Admin)
 
 const style = StyleSheet.create({
   fill: {
