@@ -1,12 +1,38 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {Text, View, Image, StyleSheet, Dimensions, TextInput, 
+        TouchableOpacity, KeyboardAvoidingView, Alert
+      } from 'react-native';
+import {connect} from 'react-redux'
+
+import {register} from '../redux/action/auth'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
 import bg from '../assets/img/bg.png';
 
-export default class Signup extends Component {
+class Signup extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      name: '',
+      email: '',
+      password: ''
+    }
+  }
+  register = () => {
+    const dataSubmit = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password
+    }
+
+    this.props.register(dataSubmit).then((response) => {
+      this.props.navigation.navigate('signin')
+    }).catch(function (error) {
+      Alert.alert('Oops!', 'Data already in used :(')
+    })
+  }
   login = () => {
     this.props.navigation.navigate('signin')
   }
@@ -23,16 +49,18 @@ export default class Signup extends Component {
             <KeyboardAvoidingView 
               behavior={Platform.OS == "android" ? "padding" : "height"}
               style={signupStyle.flex}>
-              <TextInput style={signupStyle.input} placeholder='Name' placeholderTextColor='white'/>
-              <TextInput  style={signupStyle.input} placeholder='Email' placeholderTextColor='white'/>
-              <TextInput style={signupStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
+              <TextInput onChangeText={(e) => {this.setState({name: e})}} style={signupStyle.input} placeholder='Name' placeholderTextColor='white'/>
+              <TextInput onChangeText={(e) => {this.setState({email: e})}} style={signupStyle.input} placeholder='Email' placeholderTextColor='white'/>
+              <TextInput onChangeText={(e) => {this.setState({password: e})}} style={signupStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
             </KeyboardAvoidingView>
             <View style={signupStyle.btnWrapper}>
-              <TouchableOpacity style={signupStyle.btnLogin} onPress={this.login}>
-                <Text style={signupStyle.btnTextLogin}>REGISTER</Text>
+              <TouchableOpacity style={signupStyle.btnRegister} onPress={this.register}>
+                <Text style={signupStyle.btnTextRegister}>REGISTER</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={signupStyle.btnRegister} onPress={this.login}>
-                <Text style={signupStyle.btnTextRegister}>LOGIN</Text>
+            </View>
+            <View style={signupStyle.footer}>
+              <TouchableOpacity onPress={this.signup} onPress={this.login}>
+                <Text style={signupStyle.footerText}>I already have an account</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -41,6 +69,10 @@ export default class Signup extends Component {
     );
   }
 }
+
+const mapDispatchToProps = {register}
+
+export default connect(null, mapDispatchToProps)(Signup)
 
 const signupStyle = StyleSheet.create({
   fill: {
@@ -126,5 +158,14 @@ const signupStyle = StyleSheet.create({
     color: 'white',
     fontSize: 15,
     textDecorationLine: 'underline'
+  },
+  footer: {
+    marginTop: 60,
+    alignItems: 'center'
+  },
+  footerText: {
+    color: 'white',
+    fontSize: 15,
+    textDecorationLine: 'underline',
   }
 });

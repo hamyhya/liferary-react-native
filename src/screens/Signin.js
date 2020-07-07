@@ -55,16 +55,13 @@ class Signin extends Component {
               <TextInput onChangeText={(e) => {this.setState({password: e})}} style={loginStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
             </View>
             <View style={loginStyle.btnWrapper}>
-              <TouchableOpacity style={loginStyle.btnLogin} onPress={this.signin}>
-                <Text style={loginStyle.btnTextLogin}>LOGIN</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={loginStyle.btnRegister} onPress={this.signup}>
-                <Text style={loginStyle.btnTextRegister}>REGISTER</Text>
+              <TouchableOpacity style={loginStyle.btnRegister} onPress={this.signin}>
+                <Text style={loginStyle.btnTextRegister}>LOGIN</Text>
               </TouchableOpacity>
             </View>
             <View style={loginStyle.footer}>
-              <TouchableOpacity onPress={this.adminDashboard}>
-                <Text style={loginStyle.footerText}>I'm an administrator</Text>
+              <TouchableOpacity onPress={this.signup}>
+                <Text style={loginStyle.footerText}>I don't have any account</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -123,7 +120,7 @@ const loginStyle = StyleSheet.create({
     color: 'white'
   },
   btnWrapper: {
-    marginTop: 100
+    marginTop: 150
   },
   btnLogin: {
     marginTop: 10,

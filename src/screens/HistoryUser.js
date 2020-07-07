@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native';
+import {Text, View, StyleSheet, Dimensions, ScrollView, FlatList,
+        TextInput, TouchableOpacity
+        } from 'react-native';
 import {connect} from 'react-redux'
 
 import {getHistoryUser} from '../redux/action/history'
@@ -13,18 +15,21 @@ class HistoryUser extends Component {
   constructor(props){
     super(props)
     this.state = {
-      name: 'Jono',
+      name: this.props.auth.dataLogin.name,
       page: 1,
       search: ''
     }
   }
   fetchHistory = () => {
-    // const param = `page=${this.state.page}&search=${this.state.search}`
     const name = {
       user: this.state.name
     }
+    const {search} = this.state
 
-    this.props.getHistoryUser(name)
+    this.props.getHistoryUser(name, search)
+  }
+  search = () => {
+    this.fetchHistory()
   }
   componentDidMount() {
     this.fetchHistory()
@@ -35,6 +40,17 @@ class HistoryUser extends Component {
       <View style={style.fill}>
         <View style={style.header}>
           <Text style={style.transactions}>My Histories</Text>
+          <View style={style.search}>
+            <TextInput 
+              style={style.searchInput} 
+              placeholder='Search Histories ...' 
+              placeholderTextColor='white'
+              onChangeText={(e) => {this.setState({search: e})}}
+            />
+            <TouchableOpacity style={style.searchBtn} onPress={this.search}>
+              <Text style={style.searchBtnText}>search</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <FlatList 
           style={style.content}
@@ -46,6 +62,8 @@ class HistoryUser extends Component {
             />
           )}
           keyExtractor={item => item.id}
+          refreshing={isLoading}
+          onRefresh={() => {this.fetchHistory()}}
         />
       </View>
     );
@@ -106,6 +124,35 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     alignSelf: 'center'
+  },
+  search: {
+    width: deviceWidth-120,
+    alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginTop: 10
+  },
+  searchInput: {
+    backgroundColor: '#383B4A',
+    height: 35,
+    width: deviceWidth-190,
+    fontSize: 10,
+    color: '#CFD0D4',
+    borderRadius: 10,
+    paddingLeft: 30
+  },
+  searchBtn: {
+    backgroundColor: '#383B4A',
+    height: 35,
+    width: 60,
+    marginLeft: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  searchBtnText: {
+    color: 'white',
+    fontSize: 13
   },
   content: {
     backgroundColor: '#252731',

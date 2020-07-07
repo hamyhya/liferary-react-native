@@ -9,9 +9,8 @@ return {
   }
 }
 
-const getHistoryUser = (name) =>{
-  const url = `${env}histories/user`
-  // const dataSubmit = 'Jono'
+const getHistoryUser = (name, search) =>{
+  const url = `${env}histories/user?search=${search}`
   return {
     type: 'GETHISTORY',
     payload: axios().post(url, name)

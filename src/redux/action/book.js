@@ -14,8 +14,24 @@ const getBookById = (id) =>{
   return {
     type: 'GETBOOKID',
     payload: axios().get(url)
-    }
   }
+}
+
+const getLatestBook = () =>{
+  const url = `${env}books/latest?limit=6`
+  return {
+    type: 'GETLATESTBOOK',
+    payload: axios().get(url)
+  }
+}
+
+const getAuthorBook = (author) =>{
+  const url = `${env}books/author?search=${author}`
+  return {
+    type: 'GETAUTHORBOOK',
+    payload: axios().get(url)
+  }
+}
 
 const postBook = (dataSubmit, token) =>{
 const url = `${env}books`
@@ -42,4 +58,4 @@ return {
 }
 
 
-export {getBook, getBookById, deleteBook, postBook, patchBook}
+export {getBook, getBookById, getLatestBook, getAuthorBook, deleteBook, postBook, patchBook}

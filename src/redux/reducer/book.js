@@ -1,10 +1,13 @@
 
 const initialState = {
   isLoading: false,
+  isLoadingAuthor: false,
   isError: false,
   errorMsg: '',
   dataBook: [],
   dataBookId: {},
+  dataBookLatest: [],
+  dataBookAuthor: [],
   pageInfo: []
 }
 
@@ -55,6 +58,54 @@ const book = (state=initialState, action) => {
         isLoading: false,
         isError: false,
         dataBookId: action.payload.data.data,
+        pageInfo: action.payload.data.pageInfo
+      }
+    }
+    case 'GETLATESTBOOK_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isError: false
+      }
+    }
+    case 'GETLATESTBOOK_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        errorMsg: action.payload.response.data.message,
+      }
+    }
+    case 'GETLATESTBOOK_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        dataBookLatest: action.payload.data.data,
+        pageInfo: action.payload.data.pageInfo
+      }
+    }
+    case 'GETAUTHORBOOK_PENDING': {
+      return {
+        ...state,
+        isLoadingAuthor: true,
+        isError: false
+      }
+    }
+    case 'GETAUTHORBOOK_REJECTED': {
+      return {
+        ...state,
+        isLoadingAuthor: false,
+        isError: true,
+        errorMsg: action.payload.response.data.message,
+      }
+    }
+    case 'GETAUTHORBOOK_FULFILLED': {
+      return {
+        ...state,
+        isLoadingAuthor: false,
+        isError: false,
+        dataBookAuthor: action.payload.data.data,
         pageInfo: action.payload.data.pageInfo
       }
     }

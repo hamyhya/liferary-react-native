@@ -141,6 +141,15 @@ const transaction = (state=initialState, action) => {
         isError: false
       }
     }
+    case 'LOGOUT': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        dataTransaction: [],
+        dataTransactionUser: [],
+      }
+    }
     default: {
       return {
         ...state

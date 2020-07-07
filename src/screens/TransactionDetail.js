@@ -18,18 +18,16 @@ export default class TransactionDetail extends Component {
     this.props.navigation.navigate('transaction')
   }
   render() {
+    const {title, id, date, employee} = this.props.route.params
     return (
       <View style={style.fill}>
         <Image source={bg} style={style.accent1} />
         <View style={style.accent2}>
           <View style={style.profileDetail}>
-            <Text style={style.profileName}>Dolan 1945 (ID: 17)</Text>
-            <Text style={style.ProfileJoin}>Requested by Ilham</Text>
-            <Text style={style.ProfileJoin}>Accepted by -</Text>
+            <Text style={style.profileName}>{title} (ID: {id})</Text>
+            <Text style={style.ProfileJoin}>Requested at {date}</Text>
+            <Text style={style.ProfileJoin}>Accepted by {employee}</Text>
           </View>
-          <TouchableOpacity style={style.accBtn} onPress={this.logout}>
-            <Text style={style.backBtnText}>ACCEPT</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={style.backBtn} onPress={this.logout}>
             <Text style={style.backBtnText}>BACK</Text>
           </TouchableOpacity>

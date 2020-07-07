@@ -9,8 +9,8 @@ return {
   }
 }
 
-const getTransactionByUser = (id) =>{
-  const url = `${env}transactions/user/${id}?sort=1`
+const getTransactionByUser = (id, search) =>{
+  const url = `${env}transactions/user/${id}?sort=1&search=${search}`
   return {
     type: 'GETTRANSACTIONBYUSER',
     payload: axios().get(url)

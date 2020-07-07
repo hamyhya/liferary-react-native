@@ -14,14 +14,15 @@ class Transaction extends Component {
     super(props)
     this.state = {
       id: this.props.auth.dataLogin.id,
+      search: ''
     }
   }
-  detail = () => {
-    this.props.navigation.navigate('transactiondetail')
-  }
   fetchTransaction = () => {
-    const {id} = this.state
-    this.props.getTransactionByUser(id)
+    const {id, search} = this.state
+    this.props.getTransactionByUser(id, search)
+  }
+  search = () => {
+    this.fetchTransaction()
   }
   refresh = () => {
     this.fetchTransaction()
@@ -36,7 +37,15 @@ class Transaction extends Component {
         <View style={style.header}>
           <Text style={style.transactions}>Transactions</Text>
           <View style={style.search}>
-            <TextInput style={style.searchInput} placeholder='Search Transactions ...' placeholderTextColor='white'/>
+            <TextInput 
+              style={style.searchInput} 
+              placeholder='Search Transactions ...' 
+              placeholderTextColor='white'
+              onChangeText={(e) => {this.setState({search: e})}}
+            />
+            <TouchableOpacity style={style.searchBtn} onPress={this.search}>
+              <Text style={style.searchBtnText}>search</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <FlatList 
@@ -44,9 +53,17 @@ class Transaction extends Component {
           data={dataTransactionUser}
           renderItem={({item}) => (
             <>
-              <TouchableOpacity style={style.transactionsList} onPress={this.detail}>
+              <TouchableOpacity 
+                style={style.transactionsList} 
+                onPress={() => {this.props.navigation.navigate('transactiondetail', 
+                {
+                  id: item.id,
+                  title: item.title,
+                  date: item.created_at,
+                  employee: item.employee
+                })}}>
                 <List
-                  id={item.id}
+                  title={item.title}
                   date={item.created_at}
                   status={item.status}
                 />
@@ -69,8 +86,8 @@ class List extends Component {
     return(
       <>
         <View style={style.transactionsDetail}>
-          <Text style={style.bookTitle}>{this.props.date}</Text>
-          <Text style={style.bookDate}>ID Transaction: {this.props.id}</Text>
+          <Text style={style.bookTitle}>{this.props.title}</Text>
+          <Text style={style.bookDate}>{this.props.date}</Text>
         </View>
         <View style={style.bookStatus}>
           {status===3 ?(
@@ -132,17 +149,33 @@ const style = StyleSheet.create({
     alignSelf: 'center'
   },
   search: {
-    marginTop:10,
-    alignItems: 'center'
+    width: deviceWidth-120,
+    alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginTop: 10
   },
   searchInput: {
     backgroundColor: '#383B4A',
     height: 35,
-    width: deviceWidth-120,
+    width: deviceWidth-190,
     fontSize: 10,
     color: '#CFD0D4',
     borderRadius: 10,
     paddingLeft: 30
+  },
+  searchBtn: {
+    backgroundColor: '#383B4A',
+    height: 35,
+    width: 60,
+    marginLeft: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  searchBtnText: {
+    color: 'white',
+    fontSize: 13
   },
   content: {
     backgroundColor: '#252731',

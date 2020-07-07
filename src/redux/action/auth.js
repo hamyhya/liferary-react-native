@@ -2,10 +2,10 @@ import qs from 'querystring'
 import axios from '../../services/Axios'
 const env = 'http://192.168.56.1:8080/'
 
-const register = (name, email, password)=>{
+const register = (dataSubmit)=>{
   return {
     type: 'LOGOUT',
-    payload: axios().post(`${env}users`, qs.stringify({name, email, password}))
+    payload: axios().post(`${env}users`, dataSubmit)
   }
 }
 

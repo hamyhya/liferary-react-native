@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TouchableOpacity, 
-        ScrollView, Alert} 
+        ScrollView, FlatList, Alert} 
         from 'react-native';
 import {connect} from 'react-redux'
 
-import {getBookById} from '../redux/action/book'
+import {getBookById, getAuthorBook} from '../redux/action/book'
 import {getGenreById} from '../redux/action/genre'
 import {postTransaction} from '../redux/action/transaction'
 
@@ -18,7 +18,8 @@ class Detail extends Component {
     this.state = {
       id: this.props.route.params.id,
       userId: this.props.auth.dataLogin.id,
-      token: this.props.auth.token
+      token: this.props.auth.token,
+      author: this.props.book.dataBookId.author
     }
   }
   borrowModal = () => {
@@ -59,16 +60,21 @@ class Detail extends Component {
     const {id} = this.state
     this.props.getBookById(id)
   }
+  fetchAuthorBook = async () => {
+    const {author} = this.state
+    await this.props.getAuthorBook(author)
+  }
   fetchGenre = () => {
     const id = this.props.book.dataBookId.genre
     this.props.getGenreById(id)
   }
   componentDidMount() {
     this.fetchBook()
+    this.fetchAuthorBook( )
     this.fetchGenre()
   }
   render() {
-    const {dataBookId, isLoading} = this.props.book
+    const {dataBookId, dataBookAuthor, isLoading, isLoadingAuthor} = this.props.book
     const {dataGenreId} = this.props.genre
 
     return (
@@ -103,42 +109,28 @@ class Detail extends Component {
           </TouchableOpacity>
           <View style={style.line} />
           <View style={style.recommendation}>
-            <Text style={style.bookDescTitle}>Another books from Pidi Jahat</Text>
+            <Text style={style.bookDescTitle}>{dataBookId.author} Collections</Text>
             <ScrollView style={style.recommendationScroll}>
-              <ScrollView horizontal={true} decelerationRate="normal">
-                <TouchableOpacity style={style.recommendationBook} onPress={this.detail}>
-                    <View style={style.bookCard}>
-                      <View style={style.bookImage}>
-                        <Image style={style.bookCover} source={book} />
-                      </View>
-                      <Text style={style.recommendationBookTitle}>Naruto</Text>
-                    </View>
+              <FlatList 
+                horizontal={true} 
+                data={dataBookAuthor}
+                renderItem={({item}) => (
+                <TouchableOpacity
+                  style={style.recommendationBook}
+                  onPress={()=>{
+                    this.props.navigation.push('detail', {id: item.id})
+                    this.componentDidMount()
+                  }}
+                >
+                    <AuthorBook
+                      title={item.title}
+                      picture={item.picture}
+                    />
                 </TouchableOpacity>
-                <TouchableOpacity style={style.recommendationBook} onPress={this.detail}>
-                    <View style={style.bookCard}>
-                      <View style={style.bookImage}>
-                        <Image style={style.bookCover} source={book} />
-                      </View>
-                      <Text style={style.recommendationBookTitle}>Naruto</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.recommendationBook} onPress={this.detail}>
-                    <View style={style.bookCard}>
-                      <View style={style.bookImage}>
-                        <Image style={style.bookCover} source={book} />
-                      </View>
-                      <Text style={style.recommendationBookTitle}>Naruto</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.recommendationBook} onPress={this.detail}>
-                    <View>
-                      <View style={style.bookImage}>
-                        <Image style={style.bookCover} source={book} />
-                      </View>
-                      <Text style={style.recommendationBookTitle}>Naruto</Text>
-                    </View>
-                </TouchableOpacity>
-              </ScrollView>
+                )}
+                keyExtractor={item => item.id}
+                refreshing={isLoadingAuthor}
+              />
             </ScrollView>
           </View>
         </ScrollView>
@@ -147,12 +139,25 @@ class Detail extends Component {
   }
 }
 
+class AuthorBook extends Component {
+  render(){
+    return(
+      <View style={style.bookCard}>
+        <View style={style.bookImage}>
+          <Image style={style.bookCover} source={{uri: this.props.picture}} />
+        </View>
+        <Text style={style.recommendationBookTitle}>{this.props.title}</Text>
+      </View>
+    )
+  }
+}
+
 const mapStateToProps = state => ({
   book: state.book,
   genre: state.genre,
   auth: state.auth
 })
-const mapDispatchToProps = {getBookById, getGenreById, postTransaction}
+const mapDispatchToProps = {getBookById, getGenreById, getAuthorBook, postTransaction}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Detail)
 
@@ -184,6 +189,9 @@ const style = StyleSheet.create({
     width: deviceWidth-100,
     alignSelf: 'center',
     flexDirection: 'row',
+  },
+  bookCard: {
+    width: 90,
   },
   bookImage: {
     width: 90,
@@ -274,6 +282,7 @@ const style = StyleSheet.create({
   recommendationBookTitle: {
     fontSize: 15,
     color: 'white',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    textAlign: 'center'
   },
 });

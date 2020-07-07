@@ -96,6 +96,14 @@ const history = (state=initialState, action) => {
         isError: false
       }
     }
+    case 'LOGOUT': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        dataHistory: []
+      }
+    }
     default: {
       return {
         ...state

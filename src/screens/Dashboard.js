@@ -4,7 +4,7 @@ import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity,
         from 'react-native';
 import {connect} from 'react-redux'
 
-import {getBook} from '../redux/action/book'
+import {getBook, getLatestBook} from '../redux/action/book'
 import {getGenre} from '../redux/action/genre'
 
 const deviceWidth = Dimensions.get('screen').width;
@@ -15,24 +15,32 @@ class Dashboard extends Component {
     super(props)
     this.state = {
       page: 1,
-      search: ''
+      search: '',
+      genre: ''
     }
   }
   fetchData = () => {
-    const {page, search} = this.state
-    this.props.getBook(`page=${page}%search=${search}`)
+    const {page, search, genre} = this.state
+    this.props.getBook(`page=${page}&search=${search}&genre=${genre}`)
+  }
+  fetchLatestData = () => {
+    this.props.getLatestBook()
   }
   fetchGenre = () => {
     this.props.getGenre()
   }
-
+  search = () => {
+     setTimeout(this.fetchData, 100)
+  }
   componentDidMount() {
+    this.fetchLatestData()
     this.fetchData()
     this.fetchGenre()
   }
   render() {
-    const {dataBook, isLoading} = this.props.book
+    const {dataBook, dataBookLatest, isLoading} = this.props.book
     const {dataGenre} = this.props.genre
+    const {genre, search} = this.state
 
     return (
       <View style={style.fill}>
@@ -46,48 +54,75 @@ class Dashboard extends Component {
             placeholderTextColor='white'
             onChangeText={(e) => {this.setState({search: e})}}
           />
-          <TouchableOpacity style={style.searchBtn}>
+          <TouchableOpacity style={style.searchBtn} onPress={this.search}>
             <Text style={style.searchBtnText}>search</Text>
           </TouchableOpacity>
         </View>
         <ScrollView style={style.scrollView}>
           <View style={style.categories}>
             <Text style={style.categoriesText}>Categories</Text>
-            <FlatList
-              horizontal
-              style={style.categoriesList}
-              data={dataGenre}
-              renderItem={({item}) => (
-                <Genre
-                  name={item.name}
-                />
-              )}
-              keyExtractor={item => item.id}
-            />
+            <View style={{flexDirection: 'row'}}>
+              <View style={style.categoriesList}>
+                <TouchableOpacity 
+                  style={style.categoriesBtn}
+                  onPress={() => {
+                    this.setState({genre: ''})
+                    this.search()
+                  }}
+                >
+                  <Text style={style.categoriesBtnText}>All</Text>
+                </TouchableOpacity>
+              </View>
+              <FlatList
+                horizontal
+                style={style.categoriesList}
+                data={dataGenre}
+                renderItem={({item}) => (
+                  <TouchableOpacity 
+                    style={style.categoriesBtn} 
+                    onPress={() => {
+                      this.setState({genre: item.id})
+                      this.search()
+                    }}
+                  >
+                    <Text style={style.categoriesBtnText}>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={item => item.id}
+                // refreshing={isLoading}
+                // onRefresh={() => this.fetchData()}
+              />
+            </View>
           </View>
           <View style={style.latest}>
             <Text style={style.categoriesText}>Latest release</Text>
-              <FlatList
-                horizontal
-                style={style.latestRow}
-                data={dataBook}
-                renderItem={({item}) => (
-                 <TouchableOpacity onPress={()=>this.props.navigation.navigate('detail', {id: item.id})}>
-                    <Latest
-                      title={item.title}
-                      picture={item.picture}
-                    />
-                 </TouchableOpacity>
-                )}
-                keyExtractor={item => item.id}
-                refreshing={isLoading}
-                // onRefresh={() => this.fetchData()}
-                // onEndReached={this.nextPage}
-                // onEndReachedThreshold={0.5}
-              />
+            <FlatList
+              horizontal
+              style={style.latestRow}
+              data={dataBookLatest}
+              renderItem={({item}) => (
+               <TouchableOpacity 
+                onPress={()=>this.props.navigation.push('detail', {id: item.id})}
+               >
+                  <Latest
+                    title={item.title}
+                    picture={item.picture}
+                  />
+               </TouchableOpacity>
+              )}
+              keyExtractor={item => item.id}
+              refreshing={isLoading}
+              // onRefresh={() => this.fetchData()}
+              // onEndReached={this.nextPage}
+              // onEndReachedThreshold={0.5}
+            />
           </View>
           <View style={style.categories}>
-            <Text style={style.categoriesText}>You may also like</Text>
+            {genre==='' && search==='' ?(
+              <Text style={style.categoriesText}>You may also like</Text>
+            ):(
+              <Text style={style.categoriesText}>Results</Text>
+            )}
           </View>
           <View style={style.listBook}>
             <View style={style.bookRow}>
@@ -104,7 +139,7 @@ class Dashboard extends Component {
                   numColumns={3}
                   keyExtractor={item => item.id}
                   refreshing={isLoading}
-                  // onRefresh={() => this.getData({page: currentPage})}
+                  // onRefresh={() => this.search()}
                   // onEndReached={this.nextPage}
                   // onEndReachedThreshold={0.5}
                 />
@@ -129,22 +164,12 @@ class Latest extends Component {
   }
 }
 
-class Genre extends Component {
-  render(){
-    return(
-      <TouchableOpacity style={style.categoriesBtn}>
-        <Text style={style.categoriesBtnText}>{this.props.name}</Text>
-      </TouchableOpacity>
-    )
-  }
-}
-
 const mapStateToProps = state => ({
   book: state.book,
   genre: state.genre,
   auth: state.auth
 })
-const mapDispatchToProps = {getBook, getGenre}
+const mapDispatchToProps = {getBook, getLatestBook, getGenre}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
 
