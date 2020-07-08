@@ -12,14 +12,16 @@ import Admin from '../screens/Admin'
 import Genre from '../screens/Genre'
 import EditGenre from '../screens/EditGenre'
 import AddGenre from '../screens/AddGenre'
-import HistoryAdmin from '../screens/HistoryAdmin';
-import User from '../screens/User';
-import AdminDetail from '../screens/AdminDetail';
-import AddBook from '../screens/AddBook';
-import EditBook from '../screens/EditBook';
-import UserDetail from '../screens/UserDetail';
-import TransactionDetail from '../screens/TransactionDetail';
-import DetailAdmin from '../screens/DetailAdmin';
+import HistoryAdmin from '../screens/HistoryAdmin'
+import User from '../screens/User'
+import AdminDetail from '../screens/AdminDetail'
+import AddBook from '../screens/AddBook'
+import EditBook from '../screens/EditBook'
+import UserDetail from '../screens/UserDetail'
+import TransactionDetail from '../screens/TransactionDetail'
+import DetailAdmin from '../screens/DetailAdmin'
+import Review from '../screens/Review'
+import ReviewDetail from '../screens/ReviewDetail'
 
 const Stack = createStackNavigator()
 
@@ -52,6 +54,12 @@ class Navigation extends Component {
                 <Stack.Screen component={AddBook} name={'addbook'} options={{headerShown: false}}/>
                 <Stack.Screen component={EditBook} name={'editbook'} options={{headerShown: false}}/>
                 <Stack.Screen component={TransactionDetail} name={'transactiondetail'} options={{headerShown: false}}/>
+                <Stack.Screen component={Review} name={'review'} options={{
+                  title: '',
+                  headerTransparent: true,
+                  headerTintColor: 'white'
+                }}/>
+                <Stack.Screen component={ReviewDetail} name={'reviewdetail'} options={{headerShown: false}}/>
                 <Stack.Screen component={Admin} name={'admin'} options={{
                   title: '',
                   headerTransparent: true,

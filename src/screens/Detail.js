@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TouchableOpacity, 
-        ScrollView, FlatList, Alert} 
+        ScrollView, FlatList, Alert, TextInput} 
         from 'react-native';
 import {connect} from 'react-redux'
 
@@ -108,6 +108,38 @@ class Detail extends Component {
             <Text style={style.borrowBtnText}>BORROW</Text>
           </TouchableOpacity>
           <View style={style.line} />
+          <View style={style.review}>
+            <Text style={style.bookDescTitle}>What People Says</Text>
+            <View style={style.reviewWrapper}>
+              <Text style={style.reviewUser}>Ilham Bagas :</Text>
+              <Text style={style.reviewContent}>
+                Bagus banget bukunya menginspirasi
+                saya sampai nangis bacanya, huhuhu
+              </Text>
+              <Text style={style.reviewDate}>On Monday, 8 July 2020 14:02</Text>
+            </View>
+            <View style={style.reviewWrapper}>
+              <Text style={style.reviewUser}>Ilham Bagas :</Text>
+              <Text style={style.reviewContent}>
+                Bagus banget bukunya menginspirasi
+                saya sampai nangis bacanya, huhuhu
+              </Text>
+              <Text style={style.reviewDate}>On Monday, 8 July 2020 14:02</Text>
+            </View>
+          </View>
+          <View style={style.line} />
+          <View style={style.review}>
+            <TextInput 
+              style={style.reviewInput}
+              placeholder='What do you think?'
+              placeholderTextColor='black'
+              multiline
+            />
+            <TouchableOpacity style={style.reviewBtn}>
+              <TextInput style={style.borrowBtnText}>ADD REVIEW</TextInput>
+            </TouchableOpacity>
+          </View>
+          <View style={style.line} />
           <View style={style.recommendation}>
             <Text style={style.bookDescTitle}>{dataBookId.author} Collections</Text>
             <ScrollView style={style.recommendationScroll}>
@@ -122,10 +154,10 @@ class Detail extends Component {
                     this.componentDidMount()
                   }}
                 >
-                    <AuthorBook
-                      title={item.title}
-                      picture={item.picture}
-                    />
+                  <AuthorBook
+                    title={item.title}
+                    picture={item.picture}
+                  />
                 </TouchableOpacity>
                 )}
                 keyExtractor={item => item.id}
@@ -284,5 +316,50 @@ const style = StyleSheet.create({
     color: 'white',
     alignSelf: 'center',
     textAlign: 'center'
+  },
+  review: {
+    width: deviceWidth-100,
+    alignSelf: 'center'
+  },
+  reviewWrapper: {
+    width: deviceWidth-100,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 10,
+    backgroundColor: '#383B4A'
+  },
+  reviewUser: {
+    color: 'white',
+    fontWeight: 'bold'
+  },
+  reviewContent: {
+    marginTop: 3,
+    color: 'white'
+  },
+  reviewDate: {
+    color: 'white',
+    marginTop: 5,
+    fontSize: 10
+  },
+  reviewInput: {
+    width: deviceWidth-100,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderWidth: 5,
+    borderColor: '#383B4A',
+    padding: 15,
+    height: 100,
+    alignItems: 'flex-start'
+  },
+  reviewBtn: {
+    marginTop: 10,
+    width: deviceWidth-100,
+    height: 40,
+    backgroundColor: '#c0ca33',
+    alignSelf: 'center',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 });

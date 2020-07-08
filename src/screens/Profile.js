@@ -34,6 +34,9 @@ class Profile extends Component {
       { cancelable: false }
     )
   }
+  review = () => {
+    this.props.navigation.navigate('review')
+  }
   logout = () => {
     this.props.logout()
     this.props.navigation.navigate('signin')
@@ -48,6 +51,9 @@ class Profile extends Component {
             <Text style={style.profileName}>{this.props.auth.dataLogin.email}</Text>
             <Text style={style.ProfileJoin}>We're so happy to having you :)</Text>
           </View>
+          <TouchableOpacity style={style.reviewBtn} onPress={this.review}>
+            <Text style={style.backBtnText}>MY REVIEWS</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={style.backBtn} onPress={this.logoutModal}>
             <Text style={style.backBtnText}>LOGOUT</Text>
           </TouchableOpacity>
@@ -102,8 +108,17 @@ const style = StyleSheet.create({
     color: 'white',
     fontSize: 15,
   },
-  backBtn: {
+  reviewBtn: {
     marginTop: 120,
+    width: deviceWidth-100,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#c0ca33',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  backBtn: {
+    marginTop: 10,
     width: deviceWidth-100,
     height: 40,
     borderRadius: 10,

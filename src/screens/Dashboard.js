@@ -30,7 +30,7 @@ class Dashboard extends Component {
     this.props.getGenre()
   }
   search = () => {
-     setTimeout(this.fetchData, 100)
+    setTimeout(this.fetchData, 100)
   }
   componentDidMount() {
     this.fetchLatestData()
