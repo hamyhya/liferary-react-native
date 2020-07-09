@@ -7,19 +7,20 @@ import {connect} from 'react-redux'
 import {getBookById, getAuthorBook} from '../redux/action/book'
 import {getGenreById} from '../redux/action/genre'
 import {postTransaction} from '../redux/action/transaction'
+import {getReview, postReview} from '../redux/action/review'
 
 const deviceWidth = Dimensions.get('screen').width;
-
-import book from '../assets/img/dilan.jpeg';
 
 class Detail extends Component {
   constructor(props){
     super(props)
     this.state = {
       id: this.props.route.params.id,
-      userId: this.props.auth.dataLogin.id,
+      user_id: this.props.auth.dataLogin.id,
       token: this.props.auth.token,
-      author: this.props.book.dataBookId.author
+      author: this.props.route.params.author,
+      genre: this.props.route.params.genre,
+      comment: ''
     }
   }
   borrowModal = () => {
@@ -45,7 +46,7 @@ class Detail extends Component {
     const {token} = this.state
     const dataSubmit = {
       book_id: this.state.id,
-      user_id: this.state.userId,
+      user_id: this.state.user_id,
       employee_id: 7
     }
 
@@ -56,26 +57,48 @@ class Detail extends Component {
       Alert.alert('Oops!', 'Someone has already take this book :(')
     })
   }
+  postReview = () => {
+    const {token} = this.state
+    const dataSubmit = {
+      book_id: this.state.id,
+      user_id: this.state.user_id,
+      comment: this.state.comment
+    }
+
+    this.props.postReview(dataSubmit, token).then((response) => {
+      Alert.alert('Nais! Thanks for the review', 'Your review will be very helpfull for other users')
+      this.props.navigation.navigate('mainmenu')
+    }).catch(function (error) {
+      Alert.alert('Oops!', 'Failed, make sure you write the review :(')
+    })
+
+  }
   fetchBook = () => {
     const {id} = this.state
     this.props.getBookById(id)
+  }
+  fetchReview = () => {
+    const {id} = this.state
+    this.props.getReview(id)
   }
   fetchAuthorBook = async () => {
     const {author} = this.state
     await this.props.getAuthorBook(author)
   }
   fetchGenre = () => {
-    const id = this.props.book.dataBookId.genre
-    this.props.getGenreById(id)
+    const genre = this.state.genre
+    this.props.getGenreById(genre)
   }
   componentDidMount() {
     this.fetchBook()
+    this.fetchReview()
     this.fetchAuthorBook( )
     this.fetchGenre()
   }
   render() {
     const {dataBookId, dataBookAuthor, isLoading, isLoadingAuthor} = this.props.book
     const {dataGenreId} = this.props.genre
+    const {dataReview} = this.props.review
 
     return (
       <View style={style.fill}>
@@ -109,34 +132,35 @@ class Detail extends Component {
           </TouchableOpacity>
           <View style={style.line} />
           <View style={style.review}>
-            <Text style={style.bookDescTitle}>What People Says</Text>
-            <View style={style.reviewWrapper}>
-              <Text style={style.reviewUser}>Ilham Bagas :</Text>
-              <Text style={style.reviewContent}>
-                Bagus banget bukunya menginspirasi
-                saya sampai nangis bacanya, huhuhu
-              </Text>
-              <Text style={style.reviewDate}>On Monday, 8 July 2020 14:02</Text>
-            </View>
-            <View style={style.reviewWrapper}>
-              <Text style={style.reviewUser}>Ilham Bagas :</Text>
-              <Text style={style.reviewContent}>
-                Bagus banget bukunya menginspirasi
-                saya sampai nangis bacanya, huhuhu
-              </Text>
-              <Text style={style.reviewDate}>On Monday, 8 July 2020 14:02</Text>
-            </View>
+            {dataReview!==null ?(
+              <>
+                <Text style={style.bookDescTitle}>What People Says</Text>
+                <FlatList
+                data={dataReview}
+                renderItem={({item}) => (
+                  <Review
+                    name={item.user}
+                    comment={item.comment}
+                    date={item.created_at}
+                  />
+                )}
+              />
+              </>
+            ):(
+              <Text style={style.bookDescTitle}>No reviews</Text>
+            )}
           </View>
           <View style={style.line} />
           <View style={style.review}>
             <TextInput 
               style={style.reviewInput}
+              onChangeText={(e) => {this.setState({comment: e})}}
               placeholder='What do you think?'
               placeholderTextColor='black'
               multiline
             />
-            <TouchableOpacity style={style.reviewBtn}>
-              <TextInput style={style.borrowBtnText}>ADD REVIEW</TextInput>
+            <TouchableOpacity style={style.reviewBtn} onPress={this.postReview}>
+              <Text style={style.borrowBtnText}>ADD REVIEW</Text>
             </TouchableOpacity>
           </View>
           <View style={style.line} />
@@ -171,6 +195,20 @@ class Detail extends Component {
   }
 }
 
+class Review extends Component {
+  render(){
+    return(
+      <View style={style.reviewWrapper}>
+        <Text style={style.reviewUser}>{this.props.name} :</Text>
+        <Text style={style.reviewContent}>
+          {this.props.comment}
+        </Text>
+        <Text style={style.reviewDate}>On {this.props.date}</Text>
+      </View>
+    )
+  }
+}
+
 class AuthorBook extends Component {
   render(){
     return(
@@ -187,9 +225,10 @@ class AuthorBook extends Component {
 const mapStateToProps = state => ({
   book: state.book,
   genre: state.genre,
-  auth: state.auth
+  auth: state.auth,
+  review: state.review
 })
-const mapDispatchToProps = {getBookById, getGenreById, getAuthorBook, postTransaction}
+const mapDispatchToProps = {getBookById, getGenreById, getAuthorBook, postTransaction, getReview, postReview}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Detail)
 

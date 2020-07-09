@@ -9,6 +9,7 @@ import genre from './genre'
 import auth from './auth'
 import history from './history'
 import transaction from './transaction'
+import review from './review'
 
 const persistConfig = {
   key: 'root',
@@ -23,7 +24,8 @@ const reducer = combineReducers({
   genre,
   auth,
   history,
-  transaction
+  transaction,
+  review
 })
 
 export default persistReducer(persistConfig, reducer)

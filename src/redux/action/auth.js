@@ -30,6 +30,13 @@ const loginUser = (dataSubmit)=>{
   }
 }
 
+const patchUser = (id, dataSubmit, token)=>{
+  return {
+    type: 'LOGIN',
+    payload: axios(token).patch(`${env}users/${id}`, dataSubmit)
+  }
+}
+
 const logout = ()=>{
   return {
     type: 'LOGOUT',
@@ -37,4 +44,4 @@ const logout = ()=>{
   }
 }
 
-export {register, registerAdmin, loginAdmin, loginUser, logout}
+export {register, registerAdmin, loginAdmin, loginUser, patchUser, logout}

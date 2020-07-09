@@ -102,7 +102,8 @@ class Dashboard extends Component {
               data={dataBookLatest}
               renderItem={({item}) => (
                <TouchableOpacity 
-                onPress={()=>this.props.navigation.push('detail', {id: item.id})}
+                onPress={()=>this.props.navigation.push('detail', 
+                {id: item.id, author: item.author, genre: item.genre})}
                >
                   <Latest
                     title={item.title}
@@ -129,7 +130,9 @@ class Dashboard extends Component {
               <FlatList
                   data={dataBook}
                   renderItem={({item}) => (
-                  <TouchableOpacity onPress={()=>this.props.navigation.navigate('detail', {id: item.id})}>
+                  <TouchableOpacity 
+                    onPress={()=>this.props.navigation.navigate('detail', 
+                    {id: item.id, author: item.author, genre: item.genre})}>
                       <Latest
                         title={item.title}
                         picture={item.picture}

@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Text, View, TextInput, StyleSheet, Dimensions, TouchableOpacity, 
-        FlatList} 
+        FlatList,
+        Alert} 
         from 'react-native';
 import {connect} from 'react-redux'
 
-import {getTransactionByUser} from '../redux/action/transaction'
+import {getReviewUser} from '../redux/action/review'
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -17,21 +18,21 @@ class Review extends Component {
       search: ''
     }
   }
-  fetchTransaction = () => {
+  fetchReview = () => {
     const {id, search} = this.state
-    this.props.getTransactionByUser(id, search)
+    this.props.getReviewUser(id, search)
   }
   search = () => {
-    this.fetchTransaction()
+    this.fetchReview()
   }
   refresh = () => {
-    this.fetchTransaction()
+    this.fetchReview()
   }
   componentDidMount(){
-    this.fetchTransaction()
+    this.fetchReview()
   }
   render() {
-    const {dataTransactionUser, isLoading} = this.props.transaction
+    const {dataReviewUser, isLoading} = this.props.review
     return (
       <View style={style.fill}>
         <View style={style.header}>
@@ -50,22 +51,22 @@ class Review extends Component {
         </View>
         <FlatList 
           style={style.content}
-          data={dataTransactionUser}
+          data={dataReviewUser}
           renderItem={({item}) => (
             <>
               <TouchableOpacity 
-                style={style.transactionsList} 
+                style={style.transactionsList}
                 onPress={() => {this.props.navigation.navigate('reviewdetail', 
                 {
                   id: item.id,
                   title: item.title,
                   date: item.created_at,
-                  employee: item.employee
-                })}}>
+                  comment: item.comment
+                })}}
+                >
                 <List
                   title={item.title}
                   date={item.created_at}
-                  status={item.status}
                 />
               </TouchableOpacity>
               <View style={style.line} />
@@ -95,9 +96,9 @@ class List extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  transaction: state.transaction
+  review: state.review
 })
-const mapDispatchToProps = {getTransactionByUser}
+const mapDispatchToProps = {getReviewUser}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Review)
 

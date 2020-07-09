@@ -22,6 +22,7 @@ import TransactionDetail from '../screens/TransactionDetail'
 import DetailAdmin from '../screens/DetailAdmin'
 import Review from '../screens/Review'
 import ReviewDetail from '../screens/ReviewDetail'
+import EditProfile from '../screens/EditProfile'
 
 const Stack = createStackNavigator()
 
@@ -41,6 +42,7 @@ class Navigation extends Component {
               <>
                 <Stack.Screen component={MainMenu} name={'mainmenu'} options={{headerShown: false}}/>
                 <Stack.Screen component={MainMenuAdmin} name={'mainmenuadmin'} options={{headerShown: false}}/>
+                <Stack.Screen component={EditProfile} name={'editprofile'} options={{headerShown: false}}/>
                 <Stack.Screen component={Detail} name={'detail'} options={{
                   title: '',
                   headerTransparent: true,

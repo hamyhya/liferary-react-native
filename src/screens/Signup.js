@@ -28,6 +28,7 @@ class Signup extends Component {
     }
 
     this.props.register(dataSubmit).then((response) => {
+      Alert.alert('Success!','Now login, and start your journey :)')
       this.props.navigation.navigate('signin')
     }).catch(function (error) {
       Alert.alert('Oops!', 'Data already in used :(')

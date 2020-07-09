@@ -34,6 +34,16 @@ class Profile extends Component {
       { cancelable: false }
     )
   }
+  editProfile = () => {
+    this.props.navigation.navigate('editprofile', 
+      {
+        name: this.props.auth.dataLogin.name,
+        image: this.props.auth.dataLogin.image,
+        age: this.props.auth.dataLogin.age,
+        address: this.props.auth.dataLogin.address
+      }
+    )
+  }
   review = () => {
     this.props.navigation.navigate('review')
   }
@@ -46,10 +56,19 @@ class Profile extends Component {
       <View style={style.fill}>
         <Image source={bg} style={style.accent1} />
         <View style={style.accent2}>
+          <View style={style.imageWrapper}>
+            <Image source={{uri: this.props.auth.dataLogin.image}} style={style.imageProfile}/>
+          </View>
+          <TouchableOpacity style={style.editBtn} onPress={this.editProfile}>
+            <Text style={style.editBtnText}>Edit Profile</Text>
+          </TouchableOpacity>
           <View style={style.profileDetail}>
-            <Text style={style.profileName}>{this.props.auth.dataLogin.name}</Text>
+            <Text style={style.profileName}>
+              {this.props.auth.dataLogin.name}
+              &nbsp;({this.props.auth.dataLogin.age} years old)
+            </Text>
             <Text style={style.profileName}>{this.props.auth.dataLogin.email}</Text>
-            <Text style={style.ProfileJoin}>We're so happy to having you :)</Text>
+            <Text style={style.ProfileJoin}>Live in {this.props.auth.dataLogin.address}</Text>
           </View>
           <TouchableOpacity style={style.reviewBtn} onPress={this.review}>
             <Text style={style.backBtnText}>MY REVIEWS</Text>
@@ -88,6 +107,34 @@ const style = StyleSheet.create({
     zIndex: 1,
     alignItems: 'center',
   },
+  imageWrapper: {
+    width: 100,
+    marginTop: 80,
+    height: 100,
+    backgroundColor: 'white',
+    borderRadius: 50,
+    alignSelf: 'center'
+  },
+  imageProfile: {
+    borderRadius: 50,
+    resizeMode: 'cover',
+    flex: 1,
+    width: undefined,
+    height: undefined
+  },
+  editBtn: {
+    width: 90,
+    height: 25,
+    marginTop: 10,
+    borderRadius: 5,
+    backgroundColor: '#c0ca33',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  editBtnText: {
+    color: 'white',
+  },
   title: {
     marginTop: 30,
     color: 'white',
@@ -97,7 +144,7 @@ const style = StyleSheet.create({
   },
   profileDetail: {
     width: deviceWidth-100,
-    marginTop: 250,
+    marginTop: 100,
   },
   profileName: {
     color: 'white',
@@ -109,11 +156,11 @@ const style = StyleSheet.create({
     fontSize: 15,
   },
   reviewBtn: {
-    marginTop: 120,
+    marginTop: 50,
     width: deviceWidth-100,
     height: 40,
     borderRadius: 10,
-    backgroundColor: '#c0ca33',
+    backgroundColor: '#43a047',
     alignItems: 'center',
     justifyContent: 'center'
   },
