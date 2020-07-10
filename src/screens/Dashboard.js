@@ -38,9 +38,8 @@ class Dashboard extends Component {
     this.fetchGenre()
   }
   render() {
-    const {dataBook, dataBookLatest, isLoading} = this.props.book
+    const {dataBook, dataBookLatest, isLoading, isLoadingLatest} = this.props.book
     const {dataGenre} = this.props.genre
-    const {genre, search} = this.state
 
     return (
       <View style={style.fill}>
@@ -58,7 +57,7 @@ class Dashboard extends Component {
             <Text style={style.searchBtnText}>search</Text>
           </TouchableOpacity>
         </View>
-        {isLoading ? (
+        {isLoading && isLoadingLatest ? (
           <View style={style.loadingWrapper}>
             <ActivityIndicator size="large" color="white" />
           </View>

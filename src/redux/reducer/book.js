@@ -2,6 +2,7 @@
 const initialState = {
   isLoading: false,
   isLoadingAuthor: false,
+  isLoadingLatest: false,
   isError: false,
   errorMsg: '',
   dataBook: [],
@@ -64,14 +65,14 @@ const book = (state=initialState, action) => {
     case 'GETLATESTBOOK_PENDING': {
       return {
         ...state,
-        isLoading: true,
+        isLoadingLatest: true,
         isError: false
       }
     }
     case 'GETLATESTBOOK_REJECTED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingLatest: false,
         isError: true,
         errorMsg: action.payload.response.data.message,
       }
@@ -79,7 +80,7 @@ const book = (state=initialState, action) => {
     case 'GETLATESTBOOK_FULFILLED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingLatest: false,
         isError: false,
         dataBookLatest: action.payload.data.data,
         pageInfo: action.payload.data.pageInfo

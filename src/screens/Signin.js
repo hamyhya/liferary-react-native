@@ -3,6 +3,7 @@ import {Text, View, Image, StyleSheet, Dimensions, TextInput,
         TouchableOpacity, Alert}
         from 'react-native';
 import {connect} from 'react-redux'
+import AnimatedSplash from 'react-native-animated-splash-screen'
 
 import {loginUser} from '../redux/action/auth'
 
@@ -16,7 +17,8 @@ class Signin extends Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      isLoaded: false
     }
   }
   handlerChange = (e) => {
@@ -40,33 +42,52 @@ class Signin extends Component {
   adminDashboard = () => {
     this.props.navigation.navigate('mainmenuadmin')
   }
+  loading = () => {
+    this.setState({isLoaded: true})
+  }
+  componentDidMount() {
+    setTimeout(this.loading, 3000)
+  }
   render() {
+    const {isLoaded} = this.state
     return (
-      <View style={loginStyle.fill}>
-        <Image source={bg} style={loginStyle.accent1}/>
-        <View style={loginStyle.accent2}>
-          <View>
-            <Text style={loginStyle.title}>Liferary</Text>
-            <Text style={loginStyle.subTitle}>library is life</Text>
+      <>
+        {isLoaded ? (
+          <View style={loginStyle.fill}>
+            <Image source={bg} style={loginStyle.accent1}/>
+            <View style={loginStyle.accent2}>
+              <View>
+                <Text style={loginStyle.title}>Liferary</Text>
+                <Text style={loginStyle.subTitle}>library is life</Text>
+              </View>
+              <View style={loginStyle.formWrap}>
+                <View>
+                  <TextInput onChangeText={(e) => {this.setState({email: e})}} style={loginStyle.input} placeholder='Email' placeholderTextColor='white'/>
+                  <TextInput onChangeText={(e) => {this.setState({password: e})}} style={loginStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
+                </View>
+                <View style={loginStyle.btnWrapper}>
+                  <TouchableOpacity style={loginStyle.btnRegister} onPress={this.signin}>
+                    <Text style={loginStyle.btnTextRegister}>LOGIN</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={loginStyle.footer}>
+                  <TouchableOpacity onPress={this.signup}>
+                    <Text style={loginStyle.footerText}>I don't have any account</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
           </View>
-          <View style={loginStyle.formWrap}>
-            <View>
-              <TextInput onChangeText={(e) => {this.setState({email: e})}} style={loginStyle.input} placeholder='Email' placeholderTextColor='white'/>
-              <TextInput onChangeText={(e) => {this.setState({password: e})}} style={loginStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
-            </View>
-            <View style={loginStyle.btnWrapper}>
-              <TouchableOpacity style={loginStyle.btnRegister} onPress={this.signin}>
-                <Text style={loginStyle.btnTextRegister}>LOGIN</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={loginStyle.footer}>
-              <TouchableOpacity onPress={this.signup}>
-                <Text style={loginStyle.footerText}>I don't have any account</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </View>
+        ):(
+          <AnimatedSplash
+          translucent={true}
+          isLoaded={this.state.isLoaded}
+          logoImage={require("../assets/img/splash_screen.png")}
+          backgroundColor={"#3F4254"}
+          logoHeight={150}
+          logoWidht={150}/>
+        )}
+      </>
     );
   }
 }
