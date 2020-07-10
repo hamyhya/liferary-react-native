@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity, 
-        ScrollView, FlatList} 
+        ScrollView, FlatList, ActivityIndicator} 
         from 'react-native';
 import {connect} from 'react-redux'
 
@@ -58,97 +58,106 @@ class Dashboard extends Component {
             <Text style={style.searchBtnText}>search</Text>
           </TouchableOpacity>
         </View>
-        <ScrollView style={style.scrollView}>
-          <View style={style.categories}>
-            <Text style={style.categoriesText}>Categories</Text>
-            <View style={{flexDirection: 'row'}}>
-              <View style={style.categoriesList}>
-                <TouchableOpacity 
-                  style={style.categoriesBtn}
-                  onPress={() => {
-                    this.setState({genre: ''})
-                    this.search()
-                  }}
-                >
-                  <Text style={style.categoriesBtnText}>All</Text>
-                </TouchableOpacity>
-              </View>
-              <FlatList
-                horizontal
-                style={style.categoriesList}
-                data={dataGenre}
-                renderItem={({item}) => (
+        {isLoading ? (
+          <View style={style.loadingWrapper}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        ):(
+          <ScrollView style={style.scrollView}>
+            <View style={style.categories}>
+              <Text style={style.categoriesText}>Categories</Text>
+              <View style={{flexDirection: 'row'}}>
+                <View style={style.categoriesList}>
                   <TouchableOpacity 
-                    style={style.categoriesBtn} 
+                    style={style.categoriesBtn}
                     onPress={() => {
-                      this.setState({genre: item.id})
+                      this.setState({genre: ''})
                       this.search()
                     }}
                   >
-                    <Text style={style.categoriesBtnText}>{item.name}</Text>
+                    <Text style={style.categoriesBtnText}>All</Text>
                   </TouchableOpacity>
-                )}
-                keyExtractor={item => item.id}
-                // refreshing={isLoading}
-                // onRefresh={() => this.fetchData()}
-              />
-            </View>
-          </View>
-          <View style={style.latest}>
-            <Text style={style.categoriesText}>Latest release</Text>
-            <FlatList
-              horizontal
-              style={style.latestRow}
-              data={dataBookLatest}
-              renderItem={({item}) => (
-               <TouchableOpacity 
-                onPress={()=>this.props.navigation.push('detail', 
-                {id: item.id, author: item.author, genre: item.genre})}
-               >
-                  <Latest
-                    title={item.title}
-                    picture={item.picture}
-                  />
-               </TouchableOpacity>
-              )}
-              keyExtractor={item => item.id}
-              refreshing={isLoading}
-              // onRefresh={() => this.fetchData()}
-              // onEndReached={this.nextPage}
-              // onEndReachedThreshold={0.5}
-            />
-          </View>
-          <View style={style.categories}>
-            {genre==='' && search==='' ?(
-              <Text style={style.categoriesText}>You may also like</Text>
-            ):(
-              <Text style={style.categoriesText}>Results</Text>
-            )}
-          </View>
-          <View style={style.listBook}>
-            <View style={style.bookRow}>
-              <FlatList
-                  data={dataBook}
+                </View>
+                <FlatList
+                  horizontal
+                  style={style.categoriesList}
+                  data={dataGenre}
                   renderItem={({item}) => (
-                  <TouchableOpacity 
-                    onPress={()=>this.props.navigation.navigate('detail', 
-                    {id: item.id, author: item.author, genre: item.genre})}>
-                      <Latest
-                        title={item.title}
-                        picture={item.picture}
-                      />
-                  </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={style.categoriesBtn} 
+                      onPress={() => {
+                        this.setState({genre: item.id})
+                        this.search()
+                      }}
+                    >
+                      <Text style={style.categoriesBtnText}>{item.name}</Text>
+                    </TouchableOpacity>
                   )}
-                  numColumns={3}
                   keyExtractor={item => item.id}
-                  refreshing={isLoading}
-                  // onRefresh={() => this.search()}
-                  // onEndReached={this.nextPage}
-                  // onEndReachedThreshold={0.5}
+                  // refreshing={isLoading}
+                  // onRefresh={() => this.fetchData()}
                 />
+              </View>
             </View>
-          </View>
-        </ScrollView>
+            {this.state.search==='' && this.state.genre==='' ? (
+              <>
+                <View style={style.latest}>
+                  <Text style={style.categoriesText}>Latest release</Text>
+                  <FlatList
+                    horizontal
+                    style={style.latestRow}
+                    data={dataBookLatest}
+                    renderItem={({item}) => (
+                    <TouchableOpacity 
+                      onPress={()=>this.props.navigation.push('detail', 
+                      {id: item.id, author: item.author, genre: item.genre})}
+                    >
+                        <Latest
+                          title={item.title}
+                          picture={item.picture}
+                        />
+                    </TouchableOpacity>
+                    )}
+                    keyExtractor={item => item.id}
+                    // refreshing={isLoading}
+                    // onRefresh={() => this.fetchData()}
+                    // onEndReached={this.nextPage}
+                    // onEndReachedThreshold={0.5}
+                  />
+                </View>
+              </>
+            ):(
+              <>
+              </>
+            )}
+            <View style={style.categories}>
+              <Text style={style.categoriesText}>Only for you</Text>
+            </View>
+            <View style={style.listBook}>
+              <View style={style.bookRow}>
+                <FlatList
+                    data={dataBook}
+                    renderItem={({item}) => (
+                    <TouchableOpacity 
+                      onPress={()=>this.props.navigation.navigate('detail', 
+                      {id: item.id, author: item.author, genre: item.genre})}>
+                        <Latest
+                          title={item.title}
+                          picture={item.picture}
+                        />
+                    </TouchableOpacity>
+                    )}
+                    numColumns={3}
+                    keyExtractor={item => item.id}
+                    refreshing={isLoading}
+                    // onRefresh={() => this.search()}
+                    // onEndReached={this.nextPage}
+                    // onEndReachedThreshold={0.5}
+                  />
+              </View>
+            </View>
+          </ScrollView>
+        )}
       </View>
     );
   }
@@ -183,7 +192,7 @@ const style = StyleSheet.create({
   },
   header: {
     width: deviceWidth,
-    height: 60,
+    height: 60, 
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -197,6 +206,11 @@ const style = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     alignSelf: 'center'
+  },
+  loadingWrapper: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   searchInput: {
     backgroundColor: '#383B4A',

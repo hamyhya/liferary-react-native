@@ -9,8 +9,6 @@ import {getHistoryUser} from '../redux/action/history'
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-import bg from '../assets/img/nature.jpg';
-
 class HistoryUser extends Component {
   constructor(props){
     super(props)

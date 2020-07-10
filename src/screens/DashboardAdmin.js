@@ -5,8 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
 
-import bg from '../assets/img/dilan.jpeg';
-
 export default class DashboardAdmin extends Component {
   detail = () => {
     this.props.navigation.navigate('detailadmin')

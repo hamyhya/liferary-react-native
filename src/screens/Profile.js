@@ -63,12 +63,12 @@ class Profile extends Component {
             <Text style={style.editBtnText}>Edit Profile</Text>
           </TouchableOpacity>
           <View style={style.profileDetail}>
-            <Text style={style.profileName}>
-              {this.props.auth.dataLogin.name}
-              &nbsp;({this.props.auth.dataLogin.age} years old)
-            </Text>
+            <Text style={style.profileName}>{this.props.auth.dataLogin.name}</Text>
             <Text style={style.profileName}>{this.props.auth.dataLogin.email}</Text>
-            <Text style={style.ProfileJoin}>Live in {this.props.auth.dataLogin.address}</Text>
+            <Text style={style.ProfileJoin}>
+              Live in {this.props.auth.dataLogin.address}, 
+              &nbsp;{this.props.auth.dataLogin.age} years old.
+            </Text>
           </View>
           <TouchableOpacity style={style.reviewBtn} onPress={this.review}>
             <Text style={style.backBtnText}>MY REVIEWS</Text>

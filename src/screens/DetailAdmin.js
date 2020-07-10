@@ -3,8 +3,6 @@ import {Text, View, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView}
 
 const deviceWidth = Dimensions.get('screen').width;
 
-import book from '../assets/img/dilan.jpeg';
-
 export default class DetailAdmin extends Component {
   edit = () => {
     this.props.navigation.navigate('editbook')
