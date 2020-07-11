@@ -1,8 +1,8 @@
 import axios from '../../services/Axios'
-const env = 'http://192.168.56.1:8080/'
+import {REACT_APP_URL} from 'react-native-dotenv'
 
 const getTransaction = (param) =>{
-const url = `${env}transactions?${param}`
+const url = `${REACT_APP_URL}transactions?${param}`
 return {
   type: 'GETTRANSACTION',
   payload: axios().get(url)
@@ -10,7 +10,7 @@ return {
 }
 
 const getTransactionByUser = (id, search) =>{
-  const url = `${env}transactions/user/${id}?sort=1&search=${search}`
+  const url = `${REACT_APP_URL}transactions/user/${id}?sort=1&search=${search}`
   return {
     type: 'GETTRANSACTIONBYUSER',
     payload: axios().get(url)
@@ -18,7 +18,7 @@ const getTransactionByUser = (id, search) =>{
   }
 
 const postTransaction = (dataSubmit, token) =>{
-const url = `${env}transactions`
+const url = `${REACT_APP_URL}transactions`
 return {
   type: 'POSTTRANSACTION',
   payload: axios(token).post(url, dataSubmit)
@@ -26,7 +26,7 @@ return {
 }
 
 const penaltyTransaction = (id, token) =>{
-const url = `${env}transactions/penalty/${id}`
+const url = `${REACT_APP_URL}transactions/penalty/${id}`
 return {
   type: 'PENALTYTRANSACTION',
   payload: axios(token).patch(url)
@@ -34,7 +34,7 @@ return {
 }
 
 const accTransaction = (id, dataSubmit, token) =>{
-  const url = `${env}transactions/acc/${id}`
+  const url = `${REACT_APP_URL}transactions/acc/${id}`
   return {
     type: 'ACCTRANSACTION',
     payload: axios(token).patch(url, dataSubmit)
@@ -42,7 +42,7 @@ const accTransaction = (id, dataSubmit, token) =>{
   }
 
 const deleteTransaction = (id, token) =>{
-const url = `${env}transactions/${id}`
+const url = `${REACT_APP_URL}transactions/${id}`
 return {
   type: 'DELETETRANSACTION',
   payload: axios(token).delete(url)

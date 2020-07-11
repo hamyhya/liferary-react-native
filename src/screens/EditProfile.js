@@ -4,6 +4,7 @@ import {
   Alert, TextInput
 } from 'react-native';
 import {connect} from 'react-redux'
+import FilePickerManager from 'react-native-file-picker'
 
 import {logout, patchUser} from '../redux/action/auth'
 
@@ -66,6 +67,24 @@ class EditProfile extends Component {
     this.props.logout()
     this.props.navigation.navigate('signin')
   }
+  selectFile = () => {
+    FilePickerManager.showFilePicker(null, (response) => {
+      console.log('Response = ', response);
+     
+      if (response.didCancel) {
+        console.log('User cancelled file picker');
+      }
+      else if (response.error) {
+        console.log('FilePickerManager Error: ', response.error);
+      }
+      else {
+        this.setState({
+          image: response.uri
+        });
+        console.log(this.state.image)
+      }
+    });
+  }
   render() {
     const {name, image, address } = this.state
     const age = String(this.state.age)
@@ -85,13 +104,13 @@ class EditProfile extends Component {
               />
             </View>
             <View style={style.formWrapper}>
-              <Text style={style.formTitle}>Image URL</Text>
-              <TextInput 
-                style={style.formInput} 
-                value={image}
-                onChangeText={(e) => {this.setState({image: e})}}
-                multiline
-              />
+              <Text style={style.formTitle}>Image</Text>
+              <View style={style.imageInputWrapper}>
+                <Text style={style.imageText}>{image}</Text>
+                <TouchableOpacity style={style.imageSelect} onPress={this.selectFile}>
+                  <Text style={style.imageText}>select image</Text>
+                </TouchableOpacity>
+              </View>
             </View>
             <View style={style.formWrapper}>
               <Text style={style.formTitle}>Age</Text>
@@ -175,6 +194,23 @@ const style = StyleSheet.create({
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
     color: 'white'
+  },
+  imageInputWrapper: {
+    marginTop: 10
+  },
+  imageText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 10,
+  },
+  imageSelect: {
+    width: 70,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4D4B73',
+    borderRadius: 5,
+    marginTop: 5
   },
   editBtn: {
     marginTop: 30,

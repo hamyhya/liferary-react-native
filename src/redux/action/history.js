@@ -1,8 +1,8 @@
 import axios from '../../services/Axios'
-const env = 'http://192.168.56.1:8080/'
+import {REACT_APP_URL} from 'react-native-dotenv'
 
 const getHistory = (param) =>{
-const url = `${env}histories?${param}`
+const url = `${REACT_APP_URL}histories?${param}`
 return {
   type: 'GETHISTORY',
   payload: axios().get(url)
@@ -10,7 +10,7 @@ return {
 }
 
 const getHistoryUser = (name, search) =>{
-  const url = `${env}histories/user?search=${search}`
+  const url = `${REACT_APP_URL}histories/user?search=${search}`
   return {
     type: 'GETHISTORY',
     payload: axios().post(url, name)
@@ -18,7 +18,7 @@ const getHistoryUser = (name, search) =>{
 }
 
 const postHistory = (dataSubmit, token) =>{
-const url = `${env}histories`
+const url = `${REACT_APP_URL}histories`
 return {
   type: 'POSTHISTORY',
   payload: axios(token).post(url, dataSubmit)
@@ -26,7 +26,7 @@ return {
 }
 
 const patchHistory = (id, dataSubmit) =>{
-const url = `${env}histories/${id}`
+const url = `${REACT_APP_URL}histories/${id}`
 return {
   type: 'PATCHHISTORY',
   payload: axios().patch(url, dataSubmit)
@@ -34,7 +34,7 @@ return {
 }
 
 const deleteHistory = (token) =>{
-const url = `${env}histories`
+const url = `${REACT_APP_URL}histories`
 return {
   type: 'DELETEHISTORY',
   payload: axios(token).delete(url)

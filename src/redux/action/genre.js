@@ -1,8 +1,8 @@
 import axios from '../../services/Axios'
-const env = 'http://192.168.56.1:8080/'
+import {REACT_APP_URL} from 'react-native-dotenv'
 
 const getGenre = () =>{
-const url = `${env}genres`
+const url = `${REACT_APP_URL}genres`
 return {
   type: 'GETGENRE',
   payload: axios().get(url)
@@ -10,7 +10,7 @@ return {
 }
 
 const getGenreById = (id) =>{
-  const url = `${env}genres/${id}`
+  const url = `${REACT_APP_URL}genres/${id}`
   return {
     type: 'GETGENREID',
     payload: axios().get(url)
@@ -18,7 +18,7 @@ const getGenreById = (id) =>{
 }
 
 const postGenre = (dataSubmit, token) =>{
-const url = `${env}genres`
+const url = `${REACT_APP_URL}genres`
 return {
   type: 'POSTGENRE',
   payload: axios(token).post(url, dataSubmit)
@@ -26,7 +26,7 @@ return {
 }
 
 const patchGenre = (id, dataSubmit, token) =>{
-const url = `${env}genres/${id}`
+const url = `${REACT_APP_URL}genres/${id}`
 return {
   type: 'PATCHGENRE',
   payload: axios(token).patch(url, dataSubmit)
@@ -34,7 +34,7 @@ return {
 }
 
 const deleteGenre = (id, token) =>{
-const url = `${env}genres/${id}`
+const url = `${REACT_APP_URL}genres/${id}`
 return {
   type: 'DELETEGENRE',
   payload: axios(token).delete(url)

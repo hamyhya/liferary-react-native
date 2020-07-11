@@ -1,39 +1,39 @@
 import qs from 'querystring'
 import axios from '../../services/Axios'
-const env = 'http://192.168.56.1:8080/'
+import {REACT_APP_URL} from 'react-native-dotenv'
 
 const register = (dataSubmit)=>{
   return {
     type: 'LOGOUT',
-    payload: axios().post(`${env}users`, dataSubmit)
+    payload: axios().post(`${REACT_APP_URL}users`, dataSubmit)
   }
 }
 
 const registerAdmin = (dataSubmit, token)=>{
   return {
     type: 'LOGOUT',
-    payload: axios(token).post(`${env}employes`, qs.stringify(dataSubmit))
+    payload: axios(token).post(`${REACT_APP_URL}employes`, qs.stringify(dataSubmit))
   }
 }
 
 const loginAdmin = (email, password)=>{
   return {
     type: 'LOGIN',
-    payload: axios().post(`${env}employes/login`, qs.stringify({email, password}))
+    payload: axios().post(`${REACT_APP_URL}employes/login`, qs.stringify({email, password}))
   }
 }
 
 const loginUser = (dataSubmit)=>{
   return {
     type: 'LOGIN',
-    payload: axios().post(`${env}users/login`, dataSubmit)
+    payload: axios().post(`${REACT_APP_URL}users/login`, dataSubmit)
   }
 }
 
 const patchUser = (id, dataSubmit, token)=>{
   return {
     type: 'LOGIN',
-    payload: axios(token).patch(`${env}users/${id}`, dataSubmit)
+    payload: axios(token).patch(`${REACT_APP_URL}users/${id}`, dataSubmit)
   }
 }
 

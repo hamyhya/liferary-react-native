@@ -1,8 +1,8 @@
 import axios from '../../services/Axios'
-const env = 'http://192.168.56.1:8080/'
+import {REACT_APP_URL} from 'react-native-dotenv'
 
 const getReview = (book_id) =>{
-const url = `${env}reviews?search=${book_id}`
+const url = `${REACT_APP_URL}reviews?search=${book_id}`
 return {
   type: 'GETREVIEW',
   payload: axios().get(url)
@@ -10,7 +10,7 @@ return {
 }
 
 const getReviewUser = (user_id, title) =>{
-  const url = `${env}reviews/${user_id}?search=${title}`
+  const url = `${REACT_APP_URL}reviews/${user_id}?search=${title}`
   return {
     type: 'GETREVIEWUSER',
     payload: axios().get(url)
@@ -18,7 +18,7 @@ const getReviewUser = (user_id, title) =>{
 }
 
 const postReview = (dataSubmit, token) =>{
-const url = `${env}reviews`
+const url = `${REACT_APP_URL}reviews`
 return {
   type: 'POSTREVIEW',
   payload: axios(token).post(url, dataSubmit)
@@ -26,7 +26,7 @@ return {
 }
 
 const patchReview = (id, dataSubmit, token) =>{
-const url = `${env}reviews/${id}`
+const url = `${REACT_APP_URL}reviews/${id}`
 return {
   type: 'PATCHREVIEW',
   payload: axios(token).patch(url, dataSubmit)
@@ -34,7 +34,7 @@ return {
 }
 
 const deleteReview = (id, token) =>{
-const url = `${env}reviews/${id}`
+const url = `${REACT_APP_URL}reviews/${id}`
 return {
   type: 'DELETEREVIEW',
   payload: axios(token).delete(url)

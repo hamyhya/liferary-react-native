@@ -2,6 +2,7 @@ package com.bgsapp;
 
 import android.app.Application;
 import android.content.Context;
+import com.filepicker.FilePickerPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
