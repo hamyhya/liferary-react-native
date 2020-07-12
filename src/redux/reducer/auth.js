@@ -22,7 +22,7 @@ const auth = (state=initialState, action) => {
         ...state,
         isLoading: false,
         isError: true,
-        errorMsg: action.payload.response.data.message,
+        errorMsg: 'failed!',
       }
     }
     case 'LOGIN_FULFILLED': {

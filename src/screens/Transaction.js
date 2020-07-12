@@ -14,12 +14,17 @@ class Transaction extends Component {
     super(props)
     this.state = {
       id: this.props.auth.dataLogin.id,
-      search: ''
+      search: '',
+      // page: 1,
+      // data: [],
+      // pageInfo: this.props.transaction.pageInfo
     }
   }
   fetchTransaction = () => {
-    const {id, search} = this.state
-    this.props.getTransactionByUser(id, search)
+    const {id, search, page} = this.state
+    this.props.getTransactionByUser(id, search, page)
+    // const data = this.props.transaction.dataTransactionUser
+    // this.setState({data: [...data]})
   }
   search = () => {
     this.fetchTransaction()
@@ -27,11 +32,22 @@ class Transaction extends Component {
   refresh = () => {
     this.fetchTransaction()
   }
+  // next = () => {
+  //   const { totalPage } = this.state.pageInfo
+  //   const { page, id, search, data } = this.state
+  //   if (page <= totalPage) {
+  //     this.setState({page: page+1})
+  //     this.props.getTransactionByUser(id, search, page)
+  //     const newData = this.props.transaction.dataTransactionUser
+  //     this.setState({data: [...data, ...newData]})
+  //   }
+  // }
   componentDidMount(){
     this.fetchTransaction()
   }
   render() {
     const {dataTransactionUser, isLoading} = this.props.transaction
+    // const {data} = this.state
     return (
       <View style={style.fill}>
         <View style={style.header}>
@@ -74,6 +90,8 @@ class Transaction extends Component {
           keyExtractor={item => item.id}
           refreshing={isLoading}
           onRefresh= {() => {this.refresh()}}
+          // onEndReached= {this.next}
+          // onEndReachedThreshold={0.5}
         />
       </View>
     );

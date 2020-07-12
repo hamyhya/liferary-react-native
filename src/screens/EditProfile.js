@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text, View, Image, StyleSheet, Dimensions, TouchableOpacity,
-  Alert, TextInput
+  Alert, TextInput, Platform,
 } from 'react-native';
 import {connect} from 'react-redux'
 import FilePickerManager from 'react-native-file-picker'
@@ -20,7 +20,8 @@ class EditProfile extends Component {
       id: this.props.auth.dataLogin.id,
       token: this.props.auth.dataLogin.token,
       name: this.props.route.params.name,
-      image: this.props.route.params.image,
+      picture: this.props.route.params.picture,
+      pictureName: this.props.route.params.picture,
       age: this.props.route.params.age,
       address: this.props.route.params.address,
     }
@@ -48,16 +49,27 @@ class EditProfile extends Component {
   }
   edit = () => {
     const {id, token} = this.state
-    const dataSubmit = {
-      name: this.state.name,
-      image: this.state.image,
-      age: this.state.age,
-      address: this.state.address
-    }
+    const dataSubmit = new FormData()
+    dataSubmit.append('picture', {
+      name: this.state.picture.fileName,
+      type: this.state.picture.type,
+      uri: this.state.picture.uri
+    })
+    dataSubmit.append('name', this.state.name)
+    dataSubmit.append('age', this.state.age)
+    dataSubmit.append('address', this.state.address)
+    // const dataSubmit = {
+    //   name: this.state.name,
+    //   picture: this.state.picture,
+    //   age: this.state.age,
+    //   address: this.state.address
+    // }
 
     this.props.patchUser(id, dataSubmit, token).then(() => {
       Alert.alert('Success!','Login to restart your session')
       this.logout()
+    }).catch(function (error) {
+      Alert.alert('Incorrect Data!')
     })
   }
   back = () => {
@@ -79,14 +91,15 @@ class EditProfile extends Component {
       }
       else {
         this.setState({
-          image: response.uri
+          picture: response,
+          pictureName: response.fileName
         });
-        console.log(this.state.image)
+        console.log(this.state.picture)
       }
     });
   }
   render() {
-    const {name, image, address } = this.state
+    const {name, pictureName, address } = this.state
     const age = String(this.state.age)
 
     return (
@@ -106,7 +119,7 @@ class EditProfile extends Component {
             <View style={style.formWrapper}>
               <Text style={style.formTitle}>Image</Text>
               <View style={style.imageInputWrapper}>
-                <Text style={style.imageText}>{image}</Text>
+                <Text style={style.imageText}>{pictureName}</Text>
                 <TouchableOpacity style={style.imageSelect} onPress={this.selectFile}>
                   <Text style={style.imageText}>select image</Text>
                 </TouchableOpacity>

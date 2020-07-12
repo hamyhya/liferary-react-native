@@ -55,6 +55,7 @@ const transaction = (state=initialState, action) => {
         isLoading: false,
         isError: false,
         dataTransactionUser: action.payload.data.data,
+        pageInfo: action.payload.data.pageInfo
       }
     }
     case 'POSTTRANSACTION_PENDING': {

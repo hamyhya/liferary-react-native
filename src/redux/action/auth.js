@@ -1,5 +1,6 @@
 import qs from 'querystring'
 import axios from '../../services/Axios'
+import axiosForm from '../../services/AxiosForm'
 import {REACT_APP_URL} from 'react-native-dotenv'
 
 const register = (dataSubmit)=>{
@@ -33,7 +34,7 @@ const loginUser = (dataSubmit)=>{
 const patchUser = (id, dataSubmit, token)=>{
   return {
     type: 'LOGIN',
-    payload: axios(token).patch(`${REACT_APP_URL}users/${id}`, dataSubmit)
+    payload: axiosForm(token).patch(`${REACT_APP_URL}users/${id}`, dataSubmit)
   }
 }
 

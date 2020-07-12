@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TextInput, 
-        TouchableOpacity, KeyboardAvoidingView, Alert
+        TouchableOpacity, KeyboardAvoidingView, Alert, ScrollView
       } from 'react-native';
 import {connect} from 'react-redux'
 
@@ -49,7 +49,7 @@ class Signup extends Component {
           <View style={signupStyle.formWrap}>
             <KeyboardAvoidingView 
               behavior={Platform.OS == "android" ? "padding" : "height"}
-              style={signupStyle.flex}>
+            >
               <TextInput onChangeText={(e) => {this.setState({name: e})}} style={signupStyle.input} placeholder='Name' placeholderTextColor='white'/>
               <TextInput onChangeText={(e) => {this.setState({email: e})}} style={signupStyle.input} placeholder='Email' placeholderTextColor='white'/>
               <TextInput onChangeText={(e) => {this.setState({password: e})}} style={signupStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>

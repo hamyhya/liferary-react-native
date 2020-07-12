@@ -40,6 +40,7 @@ class Dashboard extends Component {
   render() {
     const {dataBook, dataBookLatest, isLoading, isLoadingLatest} = this.props.book
     const {dataGenre} = this.props.genre
+    console.disableYellowBox=true
 
     return (
       <View style={style.fill}>
@@ -57,7 +58,7 @@ class Dashboard extends Component {
             <Text style={style.searchBtnText}>search</Text>
           </TouchableOpacity>
         </View>
-        {isLoading && isLoadingLatest ? (
+        {isLoading ? (
           <View style={style.loadingWrapper}>
             <ActivityIndicator size="large" color="white" />
           </View>

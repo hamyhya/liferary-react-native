@@ -38,7 +38,7 @@ class Profile extends Component {
     this.props.navigation.navigate('editprofile', 
       {
         name: this.props.auth.dataLogin.name,
-        image: this.props.auth.dataLogin.image,
+        picture: this.props.auth.dataLogin.picture,
         age: this.props.auth.dataLogin.age,
         address: this.props.auth.dataLogin.address
       }
@@ -57,7 +57,7 @@ class Profile extends Component {
         <Image source={bg} style={style.accent1} />
         <View style={style.accent2}>
           <View style={style.imageWrapper}>
-            <Image source={{uri: this.props.auth.dataLogin.image}} style={style.imageProfile}/>
+            <Image source={{uri: this.props.auth.dataLogin.picture}} style={style.imageProfile}/>
           </View>
           <TouchableOpacity style={style.editBtn} onPress={this.editProfile}>
             <Text style={style.editBtnText}>Edit Profile</Text>

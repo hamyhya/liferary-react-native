@@ -10,7 +10,7 @@ return {
 }
 
 const getTransactionByUser = (id, search) =>{
-  const url = `${REACT_APP_URL}transactions/user/${id}?sort=1&search=${search}`
+  const url = `${REACT_APP_URL}transactions/user/${id}?sort=1&search=${search}&limit=10`
   return {
     type: 'GETTRANSACTIONBYUSER',
     payload: axios().get(url)
