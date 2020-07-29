@@ -23,6 +23,7 @@ import DetailAdmin from '../screens/DetailAdmin'
 import Review from '../screens/Review'
 import ReviewDetail from '../screens/ReviewDetail'
 import EditProfile from '../screens/EditProfile'
+import AntooLogin from '../screens/AntooLogin'
 
 const Stack = createStackNavigator()
 

@@ -27,12 +27,16 @@ class Signup extends Component {
       password: this.state.password
     }
 
-    this.props.register(dataSubmit).then((response) => {
-      Alert.alert('Success!','Now login, and start your journey :)')
-      this.props.navigation.navigate('signin')
-    }).catch(function (error) {
-      Alert.alert('Oops!', 'Data already in used :(')
-    })
+    if (dataSubmit.name === '' || dataSubmit.email === '' || dataSubmit.password === ''){
+      Alert.alert('Oops!', 'Please fill all the form :(')
+    } else{
+      this.props.register(dataSubmit).then((response) => {
+        Alert.alert('Success!','Now login, and start your journey :)')
+        this.props.navigation.navigate('signin')
+      }).catch(function (error) {
+        Alert.alert('Oops!', 'Data already in used :(')
+      })
+    }
   }
   login = () => {
     this.props.navigation.navigate('signin')

@@ -65,12 +65,16 @@ class Detail extends Component {
       comment: this.state.comment
     }
 
-    this.props.postReview(dataSubmit, token).then((response) => {
-      Alert.alert('Nais! Thanks for the review', 'Your review will be very helpfull for other users')
-      this.props.navigation.navigate('mainmenu')
-    }).catch(function (error) {
-      Alert.alert('Oops!', 'Failed, make sure you write the review :(')
-    })
+    if(dataSubmit.comment === '' || dataSubmit.comment === ' ') {
+      Alert.alert('Wait!', 'Please write something first :(')
+    }else {
+      this.props.postReview(dataSubmit, token).then((response) => {
+        Alert.alert('Nais! Thanks for the review', 'Your review will be very helpfull for other users')
+        this.props.navigation.navigate('mainmenu')
+      }).catch(function (error) {
+        Alert.alert('Oops!', 'Failed, make sure you write the review :(')
+      })
+    }
 
   }
   fetchBook = () => {

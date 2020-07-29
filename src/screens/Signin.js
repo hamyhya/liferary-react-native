@@ -30,11 +30,15 @@ class Signin extends Component {
       password: this.state.password
     }
 
-    this.props.loginUser(dataSubmit).then((response) => {
-      this.props.navigation.navigate('mainmenu')
-    }).catch(function (error) {
-      Alert.alert('Incorrect Data!', 'Wrong email or password :(')
-    })
+    if (dataSubmit.email === '' || dataSubmit.password === '' ) {
+      Alert.alert('Ooops!','Please fill all the form :(')
+    } else{
+      this.props.loginUser(dataSubmit).then((response) => {
+        this.props.navigation.navigate('mainmenu')
+      }).catch(function (error) {
+        Alert.alert('Incorrect Data!', 'Wrong email or password :(')
+      })
+    }
   }
   signup = () => {
     this.props.navigation.navigate('signup')
