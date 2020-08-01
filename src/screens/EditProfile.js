@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text, View, Image, StyleSheet, Dimensions, TouchableOpacity,
-  Alert, TextInput, Platform,
+  Alert, TextInput, StatusBar,
 } from 'react-native';
 import {connect} from 'react-redux'
 import FilePickerManager from 'react-native-file-picker'
@@ -103,53 +103,56 @@ class EditProfile extends Component {
     const age = String(this.state.age)
 
     return (
-      <View style={style.fill}>
-        <Image source={bg} style={style.accent1} />
-        <View style={style.accent2}>
-          <Text style={style.title}>Edit Profile</Text>
-          <View style={style.formBg}>
-            <View style={style.formWrapper}>
-              <Text style={style.formTitle}>Name</Text>
-              <TextInput 
-                style={style.formInput} 
-                value={name}
-                onChangeText={(e) => {this.setState({name: e})}}
-              />
-            </View>
-            <View style={style.formWrapper}>
-              <Text style={style.formTitle}>Image</Text>
-              <View style={style.imageInputWrapper}>
-                <Text style={style.imageText}>{pictureName}</Text>
-                <TouchableOpacity style={style.imageSelect} onPress={this.selectFile}>
-                  <Text style={style.imageText}>select image</Text>
-                </TouchableOpacity>
+      <>
+        <StatusBar backgroundColor='#383B4A' />
+        <View style={style.fill}>
+          <Image source={bg} style={style.accent1} />
+          <View style={style.accent2}>
+            <Text style={style.title}>Edit Profile</Text>
+            <View style={style.formBg}>
+              <View style={style.formWrapper}>
+                <Text style={style.formTitle}>Name</Text>
+                <TextInput 
+                  style={style.formInput} 
+                  value={name}
+                  onChangeText={(e) => {this.setState({name: e})}}
+                />
+              </View>
+              <View style={style.formWrapper}>
+                <Text style={style.formTitle}>Image</Text>
+                <View style={style.imageInputWrapper}>
+                  <Text style={style.imageText}>{pictureName}</Text>
+                  <TouchableOpacity style={style.imageSelect} onPress={this.selectFile}>
+                    <Text style={style.imageText}>select image</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={style.formWrapper}>
+                <Text style={style.formTitle}>Age</Text>
+                <TextInput 
+                  style={style.formInput} 
+                  value={age} 
+                  onChangeText={(e) => {this.setState({age: e})}}
+                />
+              </View>
+              <View style={style.formWrapper}>
+                <Text style={style.formTitle}>Address</Text>
+                <TextInput 
+                  style={style.formInput} 
+                  value={address}
+                  onChangeText={(e) => {this.setState({address: e})}}
+                />
               </View>
             </View>
-            <View style={style.formWrapper}>
-              <Text style={style.formTitle}>Age</Text>
-              <TextInput 
-                style={style.formInput} 
-                value={age} 
-                onChangeText={(e) => {this.setState({age: e})}}
-              />
-            </View>
-            <View style={style.formWrapper}>
-              <Text style={style.formTitle}>Address</Text>
-              <TextInput 
-                style={style.formInput} 
-                value={address}
-                onChangeText={(e) => {this.setState({address: e})}}
-              />
-            </View>
+            <TouchableOpacity style={style.editBtn} onPress={this.editModal}>
+              <Text style={style.editBtnText}>EDIT</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.backBtn} onPress={this.back}>
+              <Text style={style.editBtnText}>BACK</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={style.editBtn} onPress={this.editModal}>
-            <Text style={style.editBtnText}>EDIT</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.backBtn} onPress={this.back}>
-            <Text style={style.editBtnText}>BACK</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      </>
     );
   }
 }

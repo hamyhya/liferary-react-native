@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TextInput, 
-        TouchableOpacity, Alert}
+        TouchableOpacity, Alert, StatusBar, ActivityIndicator}
         from 'react-native';
 import {connect} from 'react-redux'
 import AnimatedSplash from 'react-native-animated-splash-screen'
@@ -54,8 +54,10 @@ class Signin extends Component {
   }
   render() {
     const {isLoaded} = this.state
+    const {isLoading} = this.props.auth
     return (
       <>
+        <StatusBar backgroundColor='#383B4A' />
         {isLoaded ? (
           <View style={loginStyle.fill}>
             <Image source={bg} style={loginStyle.accent1}/>
@@ -70,9 +72,15 @@ class Signin extends Component {
                   <TextInput onChangeText={(e) => {this.setState({password: e})}} style={loginStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
                 </View>
                 <View style={loginStyle.btnWrapper}>
-                  <TouchableOpacity style={loginStyle.btnRegister} onPress={this.signin}>
-                    <Text style={loginStyle.btnTextRegister}>LOGIN</Text>
-                  </TouchableOpacity>
+                  {isLoading ? (
+                    <TouchableOpacity style={loginStyle.btnRegister}>
+                      <ActivityIndicator color='white' size='small' />
+                    </TouchableOpacity>
+                  ):(
+                    <TouchableOpacity style={loginStyle.btnRegister} onPress={this.signin}>
+                      <Text style={loginStyle.btnTextRegister}>LOGIN</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
                 <View style={loginStyle.footer}>
                   <TouchableOpacity onPress={this.signup}>
@@ -97,8 +105,11 @@ class Signin extends Component {
 }
 
 const mapDispatchToProps = {loginUser}
+const mapStateToProps = state => ({
+  auth: state.auth
+})
 
-export default connect(null, mapDispatchToProps)(Signin)
+export default connect(mapStateToProps, mapDispatchToProps)(Signin)
 
 const loginStyle = StyleSheet.create({
   fill: {

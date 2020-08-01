@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TouchableOpacity, 
-        ScrollView, FlatList, Alert, TextInput, ActivityIndicator} 
+        ScrollView, FlatList, Alert, TextInput, ActivityIndicator, StatusBar} 
         from 'react-native';
 import {connect} from 'react-redux'
 
@@ -111,102 +111,105 @@ class Detail extends Component {
     }
 
     return (
-      <View style={style.fill}>
-        <View style={style.header}>
-          <Text style={style.headerTitle}>Book Details</Text>
-        </View>
-        <View  style={style.line} />
-        {loading.book && loading.genre && loading.review && loading.author ? (
-          <View style={style.loadingWrapper}>
-            <ActivityIndicator size="large" color="white" />
+      <>
+        <StatusBar backgroundColor='#383B4A' />
+        <View style={style.fill}>
+          <View style={style.header}>
+            <Text style={style.headerTitle}>Book Details</Text>
           </View>
-        ):(
-          <ScrollView>
-            <View style={style.bookInfoWrapper}>
-              <View style={style.bookImage}>
-                <Image source={{uri: dataBookId.picture}} style={style.bookCover} />
-              </View>
-              <View style={style.bookInfo}>
-                <Text style={style.bookTitle}>{dataBookId.title}</Text>
-                <Text style={style.bookAuthor}>{dataBookId.author}</Text>
-                <View style={style.bookGenre}>
-                  <Text style={style.bookGenreText}>{dataGenreId}</Text>
+          <View  style={style.line} />
+          {loading.book && loading.genre && loading.review && loading.author ? (
+            <View style={style.loadingWrapper}>
+              <ActivityIndicator size="large" color="white" />
+            </View>
+          ):(
+            <ScrollView>
+              <View style={style.bookInfoWrapper}>
+                <View style={style.bookImage}>
+                  <Image source={{uri: dataBookId.picture}} style={style.bookCover} />
+                </View>
+                <View style={style.bookInfo}>
+                  <Text style={style.bookTitle}>{dataBookId.title}</Text>
+                  <Text style={style.bookAuthor}>{dataBookId.author}</Text>
+                  <View style={style.bookGenre}>
+                    <Text style={style.bookGenreText}>{dataGenreId}</Text>
+                  </View>
                 </View>
               </View>
-            </View>
-            <View  style={style.line} />
-            <View style={style.bookDesc}>
-              <Text style={style.bookDescTitle}>Book Description :</Text>
-              <Text style={style.bookDescContent}>
-                {dataBookId.description}
-              </Text>
-            </View>
-            <View style={style.line} />
-            <TouchableOpacity style={style.borrowBtn} onPress={this.borrowModal}>
-              <Text style={style.borrowBtnText}>BORROW</Text>
-            </TouchableOpacity>
-            <View style={style.line} />
-            <View style={style.review}>
-              {dataReview!==null ?(
-                <>
-                  <Text style={style.bookDescTitle}>What People Says</Text>
-                  <FlatList
-                  data={dataReview}
-                  renderItem={({item}) => (
-                    <Review
-                      name={item.user}
-                      comment={item.comment}
-                      date={item.created_at}
-                    />
-                  )}
-                />
-                </>
-              ):(
-                <Text style={style.bookDescTitle}>No reviews</Text>
-              )}
-            </View>
-            <View style={style.line} />
-            <View style={style.review}>
-              <TextInput 
-                style={style.reviewInput}
-                onChangeText={(e) => {this.setState({comment: e})}}
-                placeholder='What do you think?'
-                placeholderTextColor='black'
-                multiline
-              />
-              <TouchableOpacity style={style.reviewBtn} onPress={this.postReview}>
-                <Text style={style.borrowBtnText}>ADD REVIEW</Text>
+              <View  style={style.line} />
+              <View style={style.bookDesc}>
+                <Text style={style.bookDescTitle}>Book Description :</Text>
+                <Text style={style.bookDescContent}>
+                  {dataBookId.description}
+                </Text>
+              </View>
+              <View style={style.line} />
+              <TouchableOpacity style={style.borrowBtn} onPress={this.borrowModal}>
+                <Text style={style.borrowBtnText}>BORROW</Text>
               </TouchableOpacity>
-            </View>
-            <View style={style.line} />
-            <View style={style.recommendation}>
-              <Text style={style.bookDescTitle}>{dataBookId.author} Collections</Text>
-              <ScrollView style={style.recommendationScroll}>
-                <FlatList 
-                  horizontal={true} 
-                  data={dataBookAuthor}
-                  renderItem={({item}) => (
-                  <TouchableOpacity
-                    style={style.recommendationBook}
-                    onPress={()=>{
-                      this.props.navigation.push('detail', {id: item.id})
-                      this.componentDidMount()
-                    }}
-                  >
-                    <AuthorBook
-                      title={item.title}
-                      picture={item.picture}
-                    />
-                  </TouchableOpacity>
-                  )}
-                  keyExtractor={item => item.id}
-                  refreshing={isLoadingAuthor}
+              <View style={style.line} />
+              <View style={style.review}>
+                {dataReview!==null ?(
+                  <>
+                    <Text style={style.bookDescTitle}>What People Says</Text>
+                    <FlatList
+                    data={dataReview}
+                    renderItem={({item}) => (
+                      <Review
+                        name={item.user}
+                        comment={item.comment}
+                        date={item.created_at}
+                      />
+                    )}
+                  />
+                  </>
+                ):(
+                  <Text style={style.bookDescTitle}>No reviews</Text>
+                )}
+              </View>
+              <View style={style.line} />
+              <View style={style.review}>
+                <TextInput 
+                  style={style.reviewInput}
+                  onChangeText={(e) => {this.setState({comment: e})}}
+                  placeholder='What do you think?'
+                  placeholderTextColor='black'
+                  multiline
                 />
-              </ScrollView>
-            </View>
-          </ScrollView>
-        )}
-      </View>
+                <TouchableOpacity style={style.reviewBtn} onPress={this.postReview}>
+                  <Text style={style.borrowBtnText}>ADD REVIEW</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={style.line} />
+              <View style={style.recommendation}>
+                <Text style={style.bookDescTitle}>{dataBookId.author} Collections</Text>
+                <ScrollView style={style.recommendationScroll}>
+                  <FlatList 
+                    horizontal={true} 
+                    data={dataBookAuthor}
+                    renderItem={({item}) => (
+                    <TouchableOpacity
+                      style={style.recommendationBook}
+                      onPress={()=>{
+                        this.props.navigation.push('detail', {id: item.id})
+                        this.componentDidMount()
+                      }}
+                    >
+                      <AuthorBook
+                        title={item.title}
+                        picture={item.picture}
+                      />
+                    </TouchableOpacity>
+                    )}
+                    keyExtractor={item => item.id}
+                    refreshing={isLoadingAuthor}
+                  />
+                </ScrollView>
+              </View>
+            </ScrollView>
+          )}
+        </View>
+      </>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TextInput, 
-        TouchableOpacity, KeyboardAvoidingView, Alert, ScrollView
+        TouchableOpacity, KeyboardAvoidingView, Alert, StatusBar
       } from 'react-native';
 import {connect} from 'react-redux'
 
@@ -43,34 +43,37 @@ class Signup extends Component {
   }
   render() {
     return (
-      <View style={signupStyle.fill}>
-        <Image source={bg} style={signupStyle.accent1} />
-        <View style={signupStyle.accent2}>
-          <View>
-            <Text style={signupStyle.title}>Register</Text>
-            <Text style={signupStyle.subTitle}>Let's join us!</Text>
-          </View>
-          <View style={signupStyle.formWrap}>
-            <KeyboardAvoidingView 
-              behavior={Platform.OS == "android" ? "padding" : "height"}
-            >
-              <TextInput onChangeText={(e) => {this.setState({name: e})}} style={signupStyle.input} placeholder='Name' placeholderTextColor='white'/>
-              <TextInput onChangeText={(e) => {this.setState({email: e})}} style={signupStyle.input} placeholder='Email' placeholderTextColor='white'/>
-              <TextInput onChangeText={(e) => {this.setState({password: e})}} style={signupStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
-            </KeyboardAvoidingView>
-            <View style={signupStyle.btnWrapper}>
-              <TouchableOpacity style={signupStyle.btnRegister} onPress={this.register}>
-                <Text style={signupStyle.btnTextRegister}>REGISTER</Text>
-              </TouchableOpacity>
+      <>
+        <StatusBar backgroundColor='#383B4A' />
+        <View style={signupStyle.fill}>
+          <Image source={bg} style={signupStyle.accent1} />
+          <View style={signupStyle.accent2}>
+            <View>
+              <Text style={signupStyle.title}>Register</Text>
+              <Text style={signupStyle.subTitle}>Let's join us!</Text>
             </View>
-            <View style={signupStyle.footer}>
-              <TouchableOpacity onPress={this.signup} onPress={this.login}>
-                <Text style={signupStyle.footerText}>I already have an account</Text>
-              </TouchableOpacity>
+            <View style={signupStyle.formWrap}>
+              <KeyboardAvoidingView 
+                behavior={Platform.OS == "android" ? "padding" : "height"}
+              >
+                <TextInput onChangeText={(e) => {this.setState({name: e})}} style={signupStyle.input} placeholder='Name' placeholderTextColor='white'/>
+                <TextInput onChangeText={(e) => {this.setState({email: e})}} style={signupStyle.input} placeholder='Email' placeholderTextColor='white'/>
+                <TextInput onChangeText={(e) => {this.setState({password: e})}} style={signupStyle.input} placeholder='Password' secureTextEntry placeholderTextColor='white'/>
+              </KeyboardAvoidingView>
+              <View style={signupStyle.btnWrapper}>
+                <TouchableOpacity style={signupStyle.btnRegister} onPress={this.register}>
+                  <Text style={signupStyle.btnTextRegister}>REGISTER</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={signupStyle.footer}>
+                <TouchableOpacity onPress={this.signup} onPress={this.login}>
+                  <Text style={signupStyle.footerText}>I already have an account</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </>
     );
   }
 }

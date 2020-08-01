@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Dimensions, TextInput, TouchableOpacity, 
-        ScrollView, FlatList, ActivityIndicator} 
+        ScrollView, FlatList, ActivityIndicator, StatusBar} 
         from 'react-native';
 import {connect} from 'react-redux'
 
@@ -43,122 +43,125 @@ class Dashboard extends Component {
     console.disableYellowBox=true
 
     return (
-      <View style={style.fill}>
-        <View style={style.header}>
-          <Text style={style.headerTitle}>Liferary</Text>
-        </View>
-        <View style={style.search}>
-          <TextInput 
-            style={style.searchInput} 
-            placeholder='Search Book ...' 
-            placeholderTextColor='white'
-            onChangeText={(e) => {this.setState({search: e})}}
-          />
-          <TouchableOpacity style={style.searchBtn} onPress={this.search}>
-            <Text style={style.searchBtnText}>search</Text>
-          </TouchableOpacity>
-        </View>
-        {isLoading ? (
-          <View style={style.loadingWrapper}>
-            <ActivityIndicator size="large" color="white" />
+      <>
+        <StatusBar backgroundColor='#383B4A' />
+        <View style={style.fill}>
+          <View style={style.header}>
+            <Text style={style.headerTitle}>Liferary</Text>
           </View>
-        ):(
-          <ScrollView style={style.scrollView}>
-            <View style={style.categories}>
-              <Text style={style.categoriesText}>Categories</Text>
-              <View style={{flexDirection: 'row'}}>
-                <View style={style.categoriesList}>
-                  <TouchableOpacity 
-                    style={style.categoriesBtn}
-                    onPress={() => {
-                      this.setState({genre: ''})
-                      this.search()
-                    }}
-                  >
-                    <Text style={style.categoriesBtnText}>All</Text>
-                  </TouchableOpacity>
-                </View>
-                <FlatList
-                  horizontal
-                  style={style.categoriesList}
-                  data={dataGenre}
-                  renderItem={({item}) => (
+          <View style={style.search}>
+            <TextInput 
+              style={style.searchInput} 
+              placeholder='Search Book ...' 
+              placeholderTextColor='white'
+              onChangeText={(e) => {this.setState({search: e})}}
+            />
+            <TouchableOpacity style={style.searchBtn} onPress={this.search}>
+              <Text style={style.searchBtnText}>search</Text>
+            </TouchableOpacity>
+          </View>
+          {isLoading ? (
+            <View style={style.loadingWrapper}>
+              <ActivityIndicator size="large" color="white" />
+            </View>
+          ):(
+            <ScrollView style={style.scrollView}>
+              <View style={style.categories}>
+                <Text style={style.categoriesText}>Categories</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={style.categoriesList}>
                     <TouchableOpacity 
-                      style={style.categoriesBtn} 
+                      style={style.categoriesBtn}
                       onPress={() => {
-                        this.setState({genre: item.id})
+                        this.setState({genre: ''})
                         this.search()
                       }}
                     >
-                      <Text style={style.categoriesBtnText}>{item.name}</Text>
+                      <Text style={style.categoriesBtnText}>All</Text>
                     </TouchableOpacity>
-                  )}
-                  keyExtractor={item => item.id}
-                  // refreshing={isLoading}
-                  // onRefresh={() => this.fetchData()}
-                />
-              </View>
-            </View>
-            {this.state.search==='' && this.state.genre==='' ? (
-              <>
-                <View style={style.latest}>
-                  <Text style={style.categoriesText}>Latest release</Text>
+                  </View>
                   <FlatList
                     horizontal
-                    style={style.latestRow}
-                    data={dataBookLatest}
+                    style={style.categoriesList}
+                    data={dataGenre}
                     renderItem={({item}) => (
-                    <TouchableOpacity 
-                      onPress={()=>this.props.navigation.push('detail', 
-                      {id: item.id, author: item.author, genre: item.genre})}
-                    >
-                        <Latest
-                          title={item.title}
-                          picture={item.picture}
-                        />
-                    </TouchableOpacity>
+                      <TouchableOpacity 
+                        style={style.categoriesBtn} 
+                        onPress={() => {
+                          this.setState({genre: item.id})
+                          this.search()
+                        }}
+                      >
+                        <Text style={style.categoriesBtnText}>{item.name}</Text>
+                      </TouchableOpacity>
                     )}
                     keyExtractor={item => item.id}
                     // refreshing={isLoading}
                     // onRefresh={() => this.fetchData()}
-                    // onEndReached={this.nextPage}
-                    // onEndReachedThreshold={0.5}
                   />
                 </View>
-              </>
-            ):(
-              <>
-              </>
-            )}
-            <View style={style.categories}>
-              <Text style={style.categoriesText}>Only for you</Text>
-            </View>
-            <View style={style.listBook}>
-              <View style={style.bookRow}>
-                <FlatList
-                    data={dataBook}
-                    renderItem={({item}) => (
-                    <TouchableOpacity 
-                      onPress={()=>this.props.navigation.navigate('detail', 
-                      {id: item.id, author: item.author, genre: item.genre})}>
-                        <Latest
-                          title={item.title}
-                          picture={item.picture}
-                        />
-                    </TouchableOpacity>
-                    )}
-                    numColumns={3}
-                    keyExtractor={item => item.id}
-                    refreshing={isLoading}
-                    // onRefresh={() => this.search()}
-                    // onEndReached={this.nextPage}
-                    // onEndReachedThreshold={0.5}
-                  />
               </View>
-            </View>
-          </ScrollView>
-        )}
-      </View>
+              {this.state.search==='' && this.state.genre==='' ? (
+                <>
+                  <View style={style.latest}>
+                    <Text style={style.categoriesText}>Latest release</Text>
+                    <FlatList
+                      horizontal
+                      style={style.latestRow}
+                      data={dataBookLatest}
+                      renderItem={({item}) => (
+                      <TouchableOpacity 
+                        onPress={()=>this.props.navigation.push('detail', 
+                        {id: item.id, author: item.author, genre: item.genre})}
+                      >
+                          <Latest
+                            title={item.title}
+                            picture={item.picture}
+                          />
+                      </TouchableOpacity>
+                      )}
+                      keyExtractor={item => item.id}
+                      // refreshing={isLoading}
+                      // onRefresh={() => this.fetchData()}
+                      // onEndReached={this.nextPage}
+                      // onEndReachedThreshold={0.5}
+                    />
+                  </View>
+                </>
+              ):(
+                <>
+                </>
+              )}
+              <View style={style.categories}>
+                <Text style={style.categoriesText}>Only for you</Text>
+              </View>
+              <View style={style.listBook}>
+                <View style={style.bookRow}>
+                  <FlatList
+                      data={dataBook}
+                      renderItem={({item}) => (
+                      <TouchableOpacity 
+                        onPress={()=>this.props.navigation.navigate('detail', 
+                        {id: item.id, author: item.author, genre: item.genre})}>
+                          <Latest
+                            title={item.title}
+                            picture={item.picture}
+                          />
+                      </TouchableOpacity>
+                      )}
+                      numColumns={3}
+                      keyExtractor={item => item.id}
+                      refreshing={isLoading}
+                      // onRefresh={() => this.search()}
+                      // onEndReached={this.nextPage}
+                      // onEndReachedThreshold={0.5}
+                    />
+                </View>
+              </View>
+            </ScrollView>
+          )}
+        </View>
+      </>
     );
   }
 }
@@ -219,7 +222,8 @@ const style = StyleSheet.create({
     fontSize: 10,
     color: '#CFD0D4',
     borderRadius: 10,
-    paddingLeft: 30
+    paddingLeft: 30,
+    alignItems: 'center'
   },
   searchBtn: {
     backgroundColor: '#383B4A',

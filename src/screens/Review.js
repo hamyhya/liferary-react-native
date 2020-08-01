@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, TextInput, StyleSheet, Dimensions, TouchableOpacity, 
-        FlatList,
-        Alert} 
+        FlatList, Alert, StatusBar} 
         from 'react-native';
 import {connect} from 'react-redux'
 
@@ -34,49 +33,52 @@ class Review extends Component {
   render() {
     const {dataReviewUser, isLoading} = this.props.review
     return (
-      <View style={style.fill}>
-        <View style={style.header}>
-          <Text style={style.transactions}>My Reviews</Text>
-          <View style={style.search}>
-            <TextInput 
-              style={style.searchInput} 
-              placeholder='Search Review ...' 
-              placeholderTextColor='white'
-              onChangeText={(e) => {this.setState({search: e})}}
-            />
-            <TouchableOpacity style={style.searchBtn} onPress={this.search}>
-              <Text style={style.searchBtnText}>search</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <FlatList 
-          style={style.content}
-          data={dataReviewUser}
-          renderItem={({item}) => (
-            <>
-              <TouchableOpacity 
-                style={style.transactionsList}
-                onPress={() => {this.props.navigation.navigate('reviewdetail', 
-                {
-                  id: item.id,
-                  title: item.title,
-                  date: item.created_at,
-                  comment: item.comment
-                })}}
-                >
-                <List
-                  title={item.title}
-                  date={item.created_at}
-                />
+      <>
+        <StatusBar backgroundColor='#383B4A' />
+        <View style={style.fill}>
+          <View style={style.header}>
+            <Text style={style.transactions}>My Reviews</Text>
+            <View style={style.search}>
+              <TextInput 
+                style={style.searchInput} 
+                placeholder='Search Review ...' 
+                placeholderTextColor='white'
+                onChangeText={(e) => {this.setState({search: e})}}
+              />
+              <TouchableOpacity style={style.searchBtn} onPress={this.search}>
+                <Text style={style.searchBtnText}>search</Text>
               </TouchableOpacity>
-              <View style={style.line} />
-            </>
-          )}
-          keyExtractor={item => item.id}
-          refreshing={isLoading}
-          onRefresh= {() => {this.refresh()}}
-        />
-      </View>
+            </View>
+          </View>
+          <FlatList 
+            style={style.content}
+            data={dataReviewUser}
+            renderItem={({item}) => (
+              <>
+                <TouchableOpacity 
+                  style={style.transactionsList}
+                  onPress={() => {this.props.navigation.navigate('reviewdetail', 
+                  {
+                    id: item.id,
+                    title: item.title,
+                    date: item.created_at,
+                    comment: item.comment
+                  })}}
+                  >
+                  <List
+                    title={item.title}
+                    date={item.created_at}
+                  />
+                </TouchableOpacity>
+                <View style={style.line} />
+              </>
+            )}
+            keyExtractor={item => item.id}
+            refreshing={isLoading}
+            onRefresh= {() => {this.refresh()}}
+          />
+        </View>
+      </>
     );
   }
 }
