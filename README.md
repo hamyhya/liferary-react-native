@@ -9,7 +9,7 @@
 **Screenshots**
 
 <p align='center'>
-<img width="500" src="https://i.postimg.cc/Vk88tsdy/collapse.png" />
+<img width="500" src="https://i.postimg.cc/dQ8kdt2X/ss-collapse.png" />
 </p>
 
 
